@@ -1,11 +1,15 @@
 version: '3.1'
 services:
   stats-server:
-    build: statistics
-    image: statistics
-    container_name: statistics-container
+    build: stats-server
+    image: stats-server
+    container_name: stats-server
     ports:
       - "9090:9090"
+    depends_on:
+      - stats-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/statistics
 
   stats-db:
     image: postgres:14-alpine
