@@ -22,10 +22,10 @@ import java.time.LocalDateTime;
 @NamedNativeQueries({
         @NamedNativeQuery(name = "findAll", resultSetMapping = "mapperFromEndpointHitToViewStats",
                 query = "select app, uri, count(ip) as hits from endpoint_hits " +
-                        "where timestamp between ?1 and ?2 and uri in ?3 group by app, uri"),
+                        "where timestamp between ?1 and ?2 and uri in ?3 group by app, uri order by hits desc"),
         @NamedNativeQuery(name = "findAllUniqueIp", resultSetMapping = "mapperFromEndpointHitToViewStats",
                 query = "select app, uri, count(distinct ip) as hits from endpoint_hits " +
-                        "where timestamp between ?1 and ?2 and uri in ?3 group by app, uri")})
+                        "where timestamp between ?1 and ?2 and uri in ?3 group by app, uri order by hits desc")})
 public class EndpointHit {
 
     @Id
