@@ -1,6 +1,9 @@
 version: '3.1'
 services:
   stats-server:
+    build: statistics
+    image: statistics
+    container_name: statistics-container
     ports:
       - "9090:9090"
 

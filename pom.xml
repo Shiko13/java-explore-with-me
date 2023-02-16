@@ -10,9 +10,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
-	<name>Explore With Me</name>
+	<name>Explore with me</name>
     <modules>
-        <module>statistics</module>
+        <module>stats-server</module>
     </modules>
 
     <groupId>ru.practicum</groupId>
