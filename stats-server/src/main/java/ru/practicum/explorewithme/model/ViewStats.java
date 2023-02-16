@@ -1,15 +1,13 @@
 package ru.practicum.explorewithme.model;
 
-import lombok.Data;
-import org.springframework.stereotype.Component;
+import lombok.Value;
 
-@Data
-@Component
+@Value
 public class ViewStats {
 
-    private String app;
+    String app;
 
-    private String uri;
+    String uri;
 
-    private Long hits;
+    Long hits;
 }

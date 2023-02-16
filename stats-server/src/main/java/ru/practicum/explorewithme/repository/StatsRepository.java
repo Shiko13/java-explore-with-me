@@ -10,11 +10,9 @@ import java.util.List;
 
 public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
 
-    @Query(value = "select e.app, e.uri, count(e.ip) from EndpointHit as e " +
-            "where e.timestamp >= ?1 and e.timestamp <= ?2 and e.ip in ?3")
+    @Query(name = "findAll", nativeQuery = true)
     List<ViewStats> findAll(LocalDateTime start, LocalDateTime end, List<String> uris);
 
-    @Query(value = "select e.app, e.uri, count(distinct e.ip) from EndpointHit as e " +
-            "where e.timestamp >= ?1 and e.timestamp <= ?2 and e.ip in ?3")
+    @Query(name = "findAllUniqueIp", nativeQuery = true)
     List<ViewStats> findAllUniqueIp(LocalDateTime start, LocalDateTime end, List<String> uris);
 }

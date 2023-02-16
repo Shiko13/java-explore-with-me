@@ -19,6 +19,13 @@ import java.time.LocalDateTime;
                 columns = {@ColumnResult(name = "app", type = String.class),
                         @ColumnResult(name = "uri", type = String.class),
                         @ColumnResult(name = "hits", type = Long.class)}))
+@NamedNativeQueries({
+        @NamedNativeQuery(name = "findAll", resultSetMapping = "mapperFromEndpointHitToViewStats",
+                query = "select app, uri, count(ip) as hits from endpoint_hits " +
+                        "where timestamp between ?1 and ?2 and uri in ?3 group by app, uri"),
+        @NamedNativeQuery(name = "findAllUniqueIp", resultSetMapping = "mapperFromEndpointHitToViewStats",
+                query = "select app, uri, count(distinct ip) as hits from endpoint_hits " +
+                        "where timestamp between ?1 and ?2 and uri in ?3 group by app, uri")})
 public class EndpointHit {
 
     @Id
