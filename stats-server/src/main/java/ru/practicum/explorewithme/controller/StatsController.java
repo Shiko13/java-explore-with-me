@@ -2,7 +2,6 @@ package ru.practicum.explorewithme.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.explorewithme.dto.EndpointHitDto;
 import ru.practicum.explorewithme.model.ViewStats;

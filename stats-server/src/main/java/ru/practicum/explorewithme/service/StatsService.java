@@ -1,6 +1,5 @@
 package ru.practicum.explorewithme.service;
 
-import org.springframework.web.bind.annotation.RequestParam;
 import ru.practicum.explorewithme.dto.EndpointHitDto;
 import ru.practicum.explorewithme.model.ViewStats;
 
