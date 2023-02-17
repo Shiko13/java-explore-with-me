@@ -18,4 +18,7 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
 
     @Query(name = "findAllIfNoUris", nativeQuery = true)
     List<ViewStats> findAllIfNoUris(LocalDateTime start, LocalDateTime end);
+
+    @Query(name = "findAllIfNoUrisUnique", nativeQuery = true)
+    List<ViewStats> findAllIfNoUrisUnique(LocalDateTime start, LocalDateTime end);
 }

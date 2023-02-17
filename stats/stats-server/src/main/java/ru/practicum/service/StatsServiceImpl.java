@@ -40,7 +40,11 @@ public class StatsServiceImpl implements StatsService {
         List<ViewStats> stats;
 
         if (uris == null || uris.isEmpty()) {
-            stats = statsRepository.findAllIfNoUris(start, end);
+            if (unique) {
+                stats = statsRepository.findAllIfNoUrisUnique(start, end);
+            } else {
+                stats = statsRepository.findAllIfNoUris(start, end);
+            }
         } else {
             if (unique) {
                 stats = statsRepository.findAllUniqueIp(start, end, uris);
