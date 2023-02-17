@@ -43,7 +43,8 @@ public class StatsClient {
                 return mapper.readValue(response.body(), new TypeReference<>(){});
             }
         } catch (Exception e) {
-            log.error("");
+            log.error("StatsClient can't contact with controller for getting stats, parameters: " +
+                            "start={}, end={}, uris={}, unique={}", start, end, uris, unique);
         }
 
         return Collections.emptyList();
@@ -63,7 +64,8 @@ public class StatsClient {
             httpClient.send(httpRequest, HttpResponse.BodyHandlers.discarding());
 
         } catch (Exception e) {
-            log.error("", e);
+            log.error("StatsClient can't contact with controller for creating hit, " +
+                            "parameters: endpointHitDto={}", endpointHitDto);
         }
     }
 }
