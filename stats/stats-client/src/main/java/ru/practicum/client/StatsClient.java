@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import ru.practicum.dto.EndpointHitDto;
@@ -24,6 +25,9 @@ public class StatsClient {
     private final HttpClient httpClient;
     private final ObjectMapper mapper;
 
+    @Value("${stats-client.uri}")
+    private final String uri;
+
     public List<ViewStats> getAll(LocalDateTime start, LocalDateTime end,
                                   List<String> uris, Boolean unique) {
         try {
@@ -34,7 +38,7 @@ public class StatsClient {
             }
 
             HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:9090" + "/stats" + query))
+                    .uri(URI.create(uri + "/stats" + query))
                     .header(HttpHeaders.ACCEPT, "application/json")
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -56,7 +60,7 @@ public class StatsClient {
                     .BodyPublishers
                     .ofString(mapper.writeValueAsString(endpointHitDto));
             HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:9090" + "/hit"))
+                    .uri(URI.create(uri + "/hit"))
                     .POST(bodyPublisher)
                     .header(HttpHeaders.CONTENT_TYPE, "application/json")
                     .header(HttpHeaders.ACCEPT, "application/json")
