@@ -21,11 +21,13 @@ import java.time.LocalDateTime;
                         @ColumnResult(name = "hits", type = Long.class)}))
 @NamedNativeQueries({
         @NamedNativeQuery(name = "findAll", resultSetMapping = "mapperFromEndpointHitToViewStats",
-                query = "select app, uri, count(ip) as hits from endpoint_hits " +
-                        "where timestamp between ?1 and ?2 and uri in ?3 group by app, uri order by hits desc"),
+                query = "select APPS.NAME as app, uri, count(ip) as hits from ENDPOINT_HITS " +
+                        "left join APPS on APPS.ID = ENDPOINT_HITS.APP_ID " +
+                        "where timestamp between ?1 and ?2 and uri in ?3 group by APPS.NAME, uri order by hits desc"),
         @NamedNativeQuery(name = "findAllUniqueIp", resultSetMapping = "mapperFromEndpointHitToViewStats",
-                query = "select app, uri, count(distinct ip) as hits from endpoint_hits " +
-                        "where timestamp between ?1 and ?2 and uri in ?3 group by app, uri order by hits desc")})
+                query = "select APPS.NAME as app, uri, count(distinct ip) as hits from ENDPOINT_HITS " +
+                        "left join APPS on APPS.ID = ENDPOINT_HITS.APP_ID " +
+                        "where timestamp between ?1 and ?2 and uri in ?3 group by APPS.NAME, uri order by hits desc")})
 public class EndpointHit {
 
     @Id
@@ -33,8 +35,9 @@ public class EndpointHit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "app")
-    private String app;
+    @ManyToOne
+    @JoinColumn(name = "app_id")
+    private App app;
 
     @Column(name = "uri")
     private String uri;
