@@ -21,12 +21,13 @@ public class StatsController {
     public List<ViewStats> getAll(@RequestParam LocalDateTime start, @RequestParam LocalDateTime end,
                                   @RequestParam(required = false) List<String> uris,
                                   @RequestParam(defaultValue = "false") Boolean unique) {
-
+        log.info("Get /stats with start={}, end={}, uris={}, unique={}", start, end, uris, unique);
         return statsService.getAll(start, end, uris, unique);
     }
 
     @PostMapping("/hit")
     public void create(@RequestBody EndpointHitDto endpointHitDto) {
+        log.info("Post /hit with endpointHitDto={}", endpointHitDto);
         statsService.create(endpointHitDto);
     }
 }

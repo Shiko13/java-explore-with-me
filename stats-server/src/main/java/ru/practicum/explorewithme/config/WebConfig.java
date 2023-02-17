@@ -14,7 +14,8 @@ import java.time.format.DateTimeFormatter;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    private static final DateTimeFormatter LOCAL_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter LOCAL_DATE_TIME_FORMATTER =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {

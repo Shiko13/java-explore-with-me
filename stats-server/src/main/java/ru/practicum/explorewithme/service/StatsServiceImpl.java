@@ -20,12 +20,14 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     public void create(EndpointHitDto endpointHitDto) {
-
+        log.info("Start method create in StatsServiceImpl with endpointHitDto={}", endpointHitDto);
         statsRepository.save(EndpointHitConverter.toEndpointHit(endpointHitDto));
     }
 
     @Override
     public List<ViewStats> getAll(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
+        log.info("Start method getAll in StatsServiceImpl with start={}, end={}, " +
+                "uris={}, unique={}", start, end, uris, unique);
         List<ViewStats> stats;
         if (unique) {
             stats = statsRepository.findAllUniqueIp(start, end, uris);
