@@ -15,4 +15,7 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
 
     @Query(name = "findAllUniqueIp", nativeQuery = true)
     List<ViewStats> findAllUniqueIp(LocalDateTime start, LocalDateTime end, List<String> uris);
+
+    @Query(name = "findAllIfNoUris", nativeQuery = true)
+    List<ViewStats> findAllIfNoUris(LocalDateTime start, LocalDateTime end);
 }

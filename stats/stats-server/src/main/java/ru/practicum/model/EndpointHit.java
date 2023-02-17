@@ -28,7 +28,11 @@ import java.time.LocalDateTime;
         @NamedNativeQuery(name = "findAllUniqueIp", resultSetMapping = "mapperFromEndpointHitToViewStats",
                 query = "select APPS.NAME as app, uri, count(distinct ip) as hits from ENDPOINT_HITS " +
                         "left join APPS on APPS.ID = ENDPOINT_HITS.APP_ID " +
-                        "where timestamp between ?1 and ?2 and uri in ?3 group by APPS.NAME, uri order by hits desc")})
+                        "where timestamp between ?1 and ?2 and uri in ?3 group by APPS.NAME, uri order by hits desc"),
+        @NamedNativeQuery(name = "findAllIfNoUris", resultSetMapping = "mapperFromEndpointHitToViewStats",
+                query = "select APPS.NAME as app, uri, count(ip) as hits from ENDPOINT_HITS " +
+                        "left join APPS on APPS.ID = ENDPOINT_HITS.APP_ID " +
+                        "where timestamp between ?1 and ?2 group by APPS.NAME, uri order by hits desc")})
 public class EndpointHit {
 
     @Id

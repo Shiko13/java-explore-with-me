@@ -37,15 +37,16 @@ public class StatsServiceImpl implements StatsService {
         log.info("Start method getAll in StatsServiceImpl with start={}, end={}, " +
                 "uris={}, unique={}", start, end, uris, unique);
 
-        if (uris == null || uris.isEmpty()) {
-            return null;
-        }
-
         List<ViewStats> stats;
-        if (unique) {
-            stats = statsRepository.findAllUniqueIp(start, end, uris);
+
+        if (uris == null || uris.isEmpty()) {
+            stats = statsRepository.findAllIfNoUris(start, end);
         } else {
-            stats = statsRepository.findAll(start, end, uris);
+            if (unique) {
+                stats = statsRepository.findAllUniqueIp(start, end, uris);
+            } else {
+                stats = statsRepository.findAll(start, end, uris);
+            }
         }
 
         return stats;
