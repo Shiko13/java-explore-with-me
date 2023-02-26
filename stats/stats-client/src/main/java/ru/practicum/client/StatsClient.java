@@ -26,9 +26,9 @@ import java.util.stream.Collectors;
 public class StatsClient extends BaseClient {
 
     @Autowired
-    public StatsClient(@Value("${stats-client.uri}") String serverUrl, RestTemplateBuilder builder) {
+    public StatsClient(RestTemplateBuilder builder) {
         super(builder
-                .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
+                .uriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:9090"))
                 .requestFactory(HttpComponentsClientHttpRequestFactory::new)
                 .build()
         );

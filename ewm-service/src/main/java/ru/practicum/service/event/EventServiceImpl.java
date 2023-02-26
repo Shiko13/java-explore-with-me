@@ -104,6 +104,9 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional
     public EventFullDto create(Long userId, NewEventDto eventDto) {
+        if (eventDto.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
+            throw new NonUpdatedEventException("There is less than 2 hours before event", LocalDateTime.now());
+        }
         final User initiator = getUserFromRepo(userId);
         final Category category = getCategoryFromRepo(eventDto.getCategory());
         final Event eventToSave = EventConverter.fromDto(initiator, category, eventDto);
