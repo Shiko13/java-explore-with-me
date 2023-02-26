@@ -2,7 +2,7 @@ package ru.practicum.model;
 
 import lombok.*;
 import org.springframework.stereotype.Component;
-import ru.practicum.dto.ViewStats;
+import dto.ViewStats;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
