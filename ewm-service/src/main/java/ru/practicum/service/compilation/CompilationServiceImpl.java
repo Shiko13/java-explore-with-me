@@ -41,7 +41,7 @@ public class CompilationServiceImpl implements CompilationService {
     public List<CompilationDto> getAll(Boolean pinned, Integer from, Integer size) {
         Pageable pageable = PageRequest.of(from / size, size);
         List<Compilation> compilations;
-        if(pinned == null) {
+        if (pinned == null) {
             compilations = compilationRepository.findAll();
         } else {
             compilations = compilationRepository.findByPinnedOrderById(pinned, pageable);

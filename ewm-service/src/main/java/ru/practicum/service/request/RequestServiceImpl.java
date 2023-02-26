@@ -177,6 +177,7 @@ public class RequestServiceImpl implements RequestService {
         }
         return new EventRequestStatusUpdateResult(confirmedRequests, rejectedRequests);
     }
+
     private User getUserFromRepository(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> {

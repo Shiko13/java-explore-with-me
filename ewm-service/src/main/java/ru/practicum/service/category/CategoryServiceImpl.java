@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final EventRepository eventRepository;
+
     @Override
     public List<CategoryDto> getAll(Integer from, Integer size) {
         return categoryRepository.findAll(PageRequest.of(from / size, size)).stream()
