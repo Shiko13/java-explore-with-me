@@ -1,7 +1,14 @@
 package ru.practicum.exception;
 
-public class ValidateConflictException extends RuntimeException {
-    public ValidateConflictException(String message) {
-        super(message);
+import org.springframework.http.HttpStatus;
+
+import java.time.LocalDateTime;
+
+public class ValidateConflictException extends ApiError {
+    public ValidateConflictException(String message, LocalDateTime timestamp) {
+        this.status = HttpStatus.CONFLICT;
+        this.reason = "For the requested operation the conditions are not met.";
+        this.message = "The category is not empty";
+        this.timestamp = timestamp.withNano(0);
     }
 }
