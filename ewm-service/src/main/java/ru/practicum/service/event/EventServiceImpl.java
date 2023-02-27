@@ -129,7 +129,7 @@ public class EventServiceImpl implements EventService {
         }
         if (eventRequest.getEventDate() != null) {
             if (eventRequest.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
-                throw new DateException("There is less than 2 hours before event.");
+                throw new DateException("There is less than 2 hours before event.", LocalDateTime.now());
             }
             event.setEventDate(eventRequest.getEventDate());
         }
@@ -177,7 +177,7 @@ public class EventServiceImpl implements EventService {
         }
         if (updateEventUserRequest.getEventDate() != null) {
             if (updateEventUserRequest.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
-                throw new DateException("There is less than 2 hours before event.");
+                throw new DateException("There is less than 2 hours before event.", LocalDateTime.now());
             }
             event.setEventDate(updateEventUserRequest.getEventDate());
         }
@@ -200,6 +200,17 @@ public class EventServiceImpl implements EventService {
         if (updateEventUserRequest.getParticipantLimit() != null) {
             event.setParticipantLimit(updateEventUserRequest.getParticipantLimit());
         }
+
+        StateAction stateAction = updateEventUserRequest.getStateAction();
+
+        if (stateAction != null) {
+            switch (stateAction) {
+                case SEND_TO_REVIEW:
+                    event.setState(State.PENDING);
+                    break;
+            }
+        }
+
         Event updatedEvent = eventRepository.save(event);
         log.info("Event with id={} canceled by initiator (id={}).", event.getId(), initiator.getId());
 
@@ -259,7 +270,7 @@ public class EventServiceImpl implements EventService {
     public EventFullDto updateEventByAdmin(Long eventId, UpdateEventAdminRequest updateEventAdminRequest) {
         if (updateEventAdminRequest.getEventDate() != null) {
             if (updateEventAdminRequest.getEventDate().isBefore(LocalDateTime.now().plusHours(1))) {
-                throw new DateException("There is less than 1 hour before event.");
+                throw new DateException("There is less than 1 hour before event.", LocalDateTime.now());
             }
         }
         Event updatingEvent = getEventFromRepo(eventId);
@@ -334,7 +345,7 @@ public class EventServiceImpl implements EventService {
         Event publishingEvent = getEventFromRepo(eventId);
         validateState(publishingEvent, "publish");
         if (publishingEvent.getEventDate().isBefore(LocalDateTime.now().plusHours(1))) {
-            throw new DateException("There is less than 1 hour before event.");
+            throw new DateException("There is less than 1 hour before event.", LocalDateTime.now());
         }
         publishingEvent.setState(State.PUBLISHED);
         publishingEvent.setPublishedOn(LocalDateTime.now());

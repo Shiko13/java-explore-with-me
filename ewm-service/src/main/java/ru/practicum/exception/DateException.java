@@ -1,7 +1,14 @@
 package ru.practicum.exception;
 
-public class DateException extends RuntimeException {
-    public DateException(String message) {
-        super(message);
+import org.springframework.http.HttpStatus;
+
+import java.time.LocalDateTime;
+
+public class DateException extends ApiError {
+    public DateException(String message, LocalDateTime timestamp) {
+        this.status = HttpStatus.BAD_REQUEST;
+        this.reason = "Incorrectly time";
+        this.message = message;
+        this.timestamp = timestamp.withNano(0);
     }
 }

@@ -1,7 +1,6 @@
 package ru.practicum.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.exception.DataException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -25,16 +24,17 @@ public class ErrorHandler {
         return new ErrorResponse(e);
     }
 
-    @ExceptionHandler({DataException.class,
-            NotPendingStatusException.class,
-                ForbiddenException.class})
+    @ExceptionHandler({NotPendingStatusException.class,
+                ForbiddenException.class,
+                })
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorResponse handleBadRequest(final ApiError e) {
         log.error("HTTP status code 409 - " + e.getMessage());
         return new ErrorResponse(e);
     }
 
-    @ExceptionHandler({ValidateConflictException.class,
+    @ExceptionHandler({DateException.class,
+            ValidateConflictException.class,
             NonUpdatedEventException.class,
             ParticipantLimitException.class,
             CategoryIsNotEmptyException.class,
