@@ -6,7 +6,6 @@ import dto.EndpointHitDto;
 import dto.ViewStats;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -26,9 +25,9 @@ import java.util.stream.Collectors;
 public class StatsClient extends BaseClient {
 
     @Autowired
-    public StatsClient(@Value("${stats-client.uri}") String serverUrl, RestTemplateBuilder builder) {
+    public StatsClient(RestTemplateBuilder builder) {
         super(builder
-                .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
+                .uriTemplateHandler(new DefaultUriBuilderFactory("http://stats-server:9090"))
                 .requestFactory(HttpComponentsClientHttpRequestFactory::new)
                 .build()
         );
@@ -69,6 +68,7 @@ public class StatsClient extends BaseClient {
         while (id.hasNext()) {
             sbUrl.append("/events/").append(id.next());
         }
+        System.out.println("TESTING: sbUrl = " + sbUrl);
 
         ResponseEntity<Object> objects = get("stats?start={start}&end={end}&uris={uris}&unique={unique}", Map.of(
                 "start", start,

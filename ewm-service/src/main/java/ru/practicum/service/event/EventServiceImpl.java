@@ -411,6 +411,7 @@ public class EventServiceImpl implements EventService {
         Map<Long, Long> views = statsClient.getHits(Collections.singletonList(event.getId()));
         Integer confirmedRequests = requestRepository.findAllByEvent_IdAndStatus(event.getId(),
                 Status.CONFIRMED).size();
+        System.out.println("TESTING: ConfirmedRequests = " + confirmedRequests);
         Map<Long, Integer> confirmedRequestsForDto = new HashMap<>(Map.of(event.getId(), confirmedRequests));
 
         return EventConverter.toFullDto(event, confirmedRequestsForDto, views);
