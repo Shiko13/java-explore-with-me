@@ -34,11 +34,13 @@ public class EventFullDto {
     @NotNull
     private Boolean paid;
     private Integer participantLimit;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime publishedOn;
     private Boolean requestModeration;
     private State state;
     @NotNull
     private String title;
     private Long views;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdOn;
 }

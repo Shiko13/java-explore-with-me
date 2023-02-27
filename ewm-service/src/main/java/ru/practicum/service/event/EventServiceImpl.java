@@ -208,6 +208,9 @@ public class EventServiceImpl implements EventService {
                 case SEND_TO_REVIEW:
                     event.setState(State.PENDING);
                     break;
+                case CANCEL_REVIEW:
+                    event.setState(State.CANCELED);
+                    break;
             }
         }
 
