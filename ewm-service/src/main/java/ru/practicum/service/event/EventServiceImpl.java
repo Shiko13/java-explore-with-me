@@ -170,7 +170,7 @@ public class EventServiceImpl implements EventService {
         } else {
             state = event.getState().toString();
         }
-        validateState(event, state);
+
         if (event.getState().equals(State.PUBLISHED)) {
             throw new ValidationException(String.format("Event with status %s cannot be edit.",
                     State.PUBLISHED));
@@ -257,6 +257,11 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional
     public EventFullDto updateEventByAdmin(Long eventId, UpdateEventAdminRequest updateEventAdminRequest) {
+        if (updateEventAdminRequest.getEventDate() != null) {
+            if (updateEventAdminRequest.getEventDate().isBefore(LocalDateTime.now().plusHours(1))) {
+                throw new DateException("There is less than 1 hour before event.");
+            }
+        }
         Event updatingEvent = getEventFromRepo(eventId);
         if (updateEventAdminRequest.getTitle() != null) {
             updatingEvent.setTitle(updateEventAdminRequest.getTitle());

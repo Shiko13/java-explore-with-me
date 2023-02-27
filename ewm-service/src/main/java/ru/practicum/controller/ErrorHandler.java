@@ -26,7 +26,8 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler({DataException.class,
-            NotPendingStatusException.class})
+            NotPendingStatusException.class,
+                ForbiddenException.class})
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorResponse handleBadRequest(final ApiError e) {
         log.error("HTTP status code 409 - " + e.getMessage());

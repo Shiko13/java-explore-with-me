@@ -55,9 +55,7 @@ public class RequestServiceImpl implements RequestService {
         User requester = getUserFromRepository(userId);
         Event event = getEventFromRepository(eventId);
         if (requestRepository.findByEvent_IdAndRequester_Id(event.getId(), requester.getId()).isPresent()) {
-            throw new ForbiddenException(
-                    String.format("Participation request for event with id=%d already exists.", event.getId())
-            );
+            throw new ForbiddenException("Participation request for event with this id already exists.");
         }
         if (event.getInitiator().getId().equals(requester.getId())) {
             throw new ValidateConflictException(String.format("User with id=%d cannot request for his own event (id=%d)",
