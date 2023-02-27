@@ -19,7 +19,7 @@ public interface EventService {
 
     EventFullDto update(Long userId, UpdateEventUserRequest eventRequest);
 
-    EventFullDto cancelByInitiator(Long userId, Long eventId);
+    EventFullDto updateByInitiator(Long userId, Long eventId, UpdateEventUserRequest updateEventUserRequest);
 
     EventFullDto get(Long id, HttpServletRequest request);
 

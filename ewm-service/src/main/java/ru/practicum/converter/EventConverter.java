@@ -88,7 +88,8 @@ public class EventConverter {
                 event.getRequestModeration(),
                 event.getState(),
                 event.getTitle(),
-                Optional.ofNullable(views.get(event.getId())).orElse(0L)
+                Optional.ofNullable(views.get(event.getId())).orElse(0L),
+                event.getCreatedOn()
         );
     }
 

@@ -160,12 +160,46 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public EventFullDto cancelByInitiator(Long userId, Long eventId) {
+    public EventFullDto updateByInitiator(Long userId, Long eventId, UpdateEventUserRequest updateEventUserRequest) {
         User initiator = getUserFromRepo(userId);
         Event event = getEventFromRepo(eventId);
         validateInitiator(initiator.getId(), event.getInitiator().getId(), event.getId());
-        validateState(event, "cancel");
-        event.setState(State.CANCELED);
+        String state;
+        if (updateEventUserRequest.getStateAction() != null) {
+            state = updateEventUserRequest.getStateAction().toString();
+        } else {
+            state = event.getState().toString();
+        }
+        validateState(event, state);
+        if (event.getState().equals(State.PUBLISHED)) {
+            throw new ValidationException(String.format("Event with status %s cannot be edit.",
+                    State.PUBLISHED));
+        }
+        if (updateEventUserRequest.getEventDate() != null) {
+            if (updateEventUserRequest.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
+                throw new DateException("There is less than 2 hours before event.");
+            }
+            event.setEventDate(updateEventUserRequest.getEventDate());
+        }
+        if (updateEventUserRequest.getTitle() != null) {
+            event.setTitle(updateEventUserRequest.getTitle());
+        }
+        if (updateEventUserRequest.getAnnotation() != null) {
+            event.setAnnotation(updateEventUserRequest.getAnnotation());
+        }
+        if (updateEventUserRequest.getDescription() != null) {
+            event.setDescription(updateEventUserRequest.getDescription());
+        }
+        if (updateEventUserRequest.getCategory() != null) {
+            Category category = getCategoryFromRepo(updateEventUserRequest.getCategory());
+            event.setCategory(category);
+        }
+        if (updateEventUserRequest.getPaid() != null) {
+            event.setPaid(updateEventUserRequest.getPaid());
+        }
+        if (updateEventUserRequest.getParticipantLimit() != null) {
+            event.setParticipantLimit(updateEventUserRequest.getParticipantLimit());
+        }
         Event updatedEvent = eventRepository.save(event);
         log.info("Event with id={} canceled by initiator (id={}).", event.getId(), initiator.getId());
 
@@ -387,10 +421,10 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    private void validateState(Event event, String action) {
+    private void validateState(Event event, String state) {
         if (!event.getState().equals(State.PENDING)) {
             throw new BadStateException(String.format(
-                    "You can't %s event with status %s.", action, event.getState()
+                    "You can't %s event with status %s.", state, event.getState()
             ));
         }
     }

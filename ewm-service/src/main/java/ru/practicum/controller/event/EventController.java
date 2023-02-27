@@ -54,10 +54,11 @@ public class EventController {
     }
 
     @PatchMapping("/users/{userId}/events/{eventId}")
-    public EventFullDto cancelByInitiator(@PathVariable @Positive Long userId,
-                                          @PathVariable @Positive Long eventId) {
-        log.info("Get request for cancelling event with id={} by initiator (id={}).", eventId, userId);
-        return eventService.cancelByInitiator(userId, eventId);
+    public EventFullDto update(@PathVariable @Positive Long userId,
+                               @PathVariable @Positive Long eventId,
+                               @Valid @RequestBody UpdateEventUserRequest updateEventUserRequest) {
+        log.info("Get request for updating event with id={} by initiator (id={}).", eventId, userId);
+        return eventService.updateByInitiator(userId, eventId, updateEventUserRequest);
     }
 
     @GetMapping("/events/{id}")

@@ -38,4 +38,5 @@ public class EventFullDto {
     @NotNull
     private String title;
     private Long views;
+    private LocalDateTime createdOn;
 }
