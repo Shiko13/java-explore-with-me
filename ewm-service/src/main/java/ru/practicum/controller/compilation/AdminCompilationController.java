@@ -2,6 +2,8 @@ package ru.practicum.controller.compilation;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.UpdateCompilationRequest;
@@ -22,15 +24,16 @@ public class AdminCompilationController {
     private final CompilationService compilationService;
 
     @PostMapping
-    public CompilationDto create(@Valid @RequestBody NewCompilationDto newCompilationDto) {
+    public ResponseEntity<CompilationDto> create(@Valid @RequestBody NewCompilationDto newCompilationDto) {
         log.info("Post /admin/compilations with newCompilationDto={}", newCompilationDto);
-        return compilationService.create(newCompilationDto);
+        return new ResponseEntity<>(compilationService.create(newCompilationDto), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{compId}")
-    public void delete(@NotNull @PathVariable Long compId) {
+    public ResponseEntity<Void> delete(@NotNull @PathVariable Long compId) {
         log.info("Delete /admin/compilations/{}", compId);
         compilationService.delete(compId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping("/{compId}")

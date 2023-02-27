@@ -55,7 +55,7 @@ public class RequestServiceImpl implements RequestService {
         User requester = getUserFromRepository(userId);
         Event event = getEventFromRepository(eventId);
         if (requestRepository.findByEvent_IdAndRequester_Id(event.getId(), requester.getId()).isPresent()) {
-            throw new ForbiddenException("Participation request for event with this id already exists.");
+            throw new ForbiddenException("Participation request for event with this id already exists.", LocalDateTime.now());
         }
         if (event.getInitiator().getId().equals(requester.getId())) {
             throw new ValidateConflictException(String.format("User with id=%d cannot request for his own event (id=%d)",
@@ -93,11 +93,10 @@ public class RequestServiceImpl implements RequestService {
         User user = getUserFromRepository(userId);
         ParticipationRequest request = getRequestFromRepository(requestId);
         if (!user.getId().equals(request.getRequester().getId())) {
-            throw new ForbiddenException(String.format("User with id=%d haven't access to cancel event with id=%d",
-                    user.getId(),
-                    request.getRequester().getId()));
+            throw new ForbiddenException("User with this id haven't access to cancel event with this id",
+                    LocalDateTime.now());
         }
-        request.setStatus(Status.CANCELLED);
+        request.setStatus(Status.CANCELED);
         ParticipationRequest savedRequest = requestRepository.save(request);
         log.info("Request with id={} to event with id={} successfully canceled by user with id={}.",
                 request.getId(), request.getEvent().getId(), user.getId());

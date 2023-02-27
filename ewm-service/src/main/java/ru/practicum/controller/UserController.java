@@ -2,6 +2,8 @@ package ru.practicum.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.UserDto;
 import ru.practicum.service.user.UserService;
@@ -29,14 +31,15 @@ public class UserController {
     }
 
     @PostMapping
-    public UserDto create(@RequestBody @Valid NewUserRequest request) {
+    public ResponseEntity<UserDto> create(@RequestBody @Valid NewUserRequest request) {
         log.info("Post /admin/users, user_name={}, user_email", request.getName(), request.getEmail());
-        return userService.create(request);
+        return new ResponseEntity<>(userService.create(request), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{userId}")
-    public void deleteById(@PathVariable @PositiveOrZero long userId) {
+    public ResponseEntity<Void> deleteById(@PathVariable @PositiveOrZero long userId) {
         log.info("Delete /admin/users/{}", userId);
         userService.deleteById(userId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

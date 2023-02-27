@@ -2,6 +2,8 @@ package ru.practicum.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.EventRequestStatusUpdateRequest;
 import ru.practicum.EventRequestStatusUpdateResult;
@@ -28,14 +30,14 @@ public class RequestController {
     public List<ParticipationRequestDto> getForEvent(@NotNull @PathVariable Long userId,
                                                 @NotNull @PathVariable Long eventId) {
         log.info("Get /users/{}/events/{eventId}/requests", userId, eventId);
-        return requestService.getForEvent(eventId, userId);
+        return requestService.getForEvent(userId, eventId);
     }
 
     @PostMapping("/requests")
-    public ParticipationRequestDto create(@NotNull @PathVariable Long userId,
-                                                @NotNull @RequestParam Long eventId) {
+    public ResponseEntity<ParticipationRequestDto> create(@NotNull @PathVariable Long userId,
+                                                          @NotNull @RequestParam Long eventId) {
         log.info("Post /users/{}/requests with eventId={}", userId, eventId);
-        return requestService.create(userId, eventId);
+        return new ResponseEntity<>(requestService.create(userId, eventId), HttpStatus.CREATED);
     }
 
     @PatchMapping("/requests/{requestId}/cancel")

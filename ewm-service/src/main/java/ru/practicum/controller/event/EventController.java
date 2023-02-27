@@ -2,6 +2,8 @@ package ru.practicum.controller.event;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.service.event.EventService;
 import ru.practicum.UpdateEventUserRequest;
@@ -40,10 +42,10 @@ public class EventController {
     }
 
     @PostMapping("/users/{userId}/events")
-    public EventFullDto create(@PathVariable @Positive Long userId,
-                               @RequestBody @Valid NewEventDto eventDto) {
+    public ResponseEntity<EventFullDto> create(@PathVariable @Positive Long userId,
+                                               @RequestBody @Valid NewEventDto eventDto) {
         log.info("Get request for saving event {} from user with id={}", eventDto.getTitle(), userId);
-        return eventService.create(userId, eventDto);
+        return new ResponseEntity<>(eventService.create(userId, eventDto), HttpStatus.CREATED);
     }
 
     @PatchMapping("/users/{userId}/events")

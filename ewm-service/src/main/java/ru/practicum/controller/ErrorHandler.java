@@ -25,7 +25,6 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler({NotPendingStatusException.class,
-                ForbiddenException.class,
                 })
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorResponse handleBadRequest(final ApiError e) {
@@ -38,6 +37,7 @@ public class ErrorHandler {
             NonUpdatedEventException.class,
             ParticipantLimitException.class,
             CategoryIsNotEmptyException.class,
+            ForbiddenException.class
             })
     @ResponseStatus(value = HttpStatus.CONFLICT)
     public ErrorResponse handleConflict(final ApiError e) {
