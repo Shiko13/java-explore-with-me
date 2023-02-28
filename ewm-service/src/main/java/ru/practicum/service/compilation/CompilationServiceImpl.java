@@ -6,7 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.UpdateCompilationRequest;
+import ru.practicum.model.UpdateCompilationRequest;
 import ru.practicum.client.StatsClient;
 import ru.practicum.converter.CompilationConverter;
 import ru.practicum.converter.EventConverter;
@@ -15,7 +15,7 @@ import ru.practicum.dto.EventShortDto;
 import ru.practicum.dto.NewCompilationDto;
 import ru.practicum.exception.NotFoundParameterException;
 import ru.practicum.repository.CompilationRepository;
-import ru.practicum.Status;
+import ru.practicum.model.Status;
 import ru.practicum.exception.BadRequestException;
 import ru.practicum.model.Compilation;
 import ru.practicum.model.Event;
@@ -39,13 +39,16 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public List<CompilationDto> getAll(Boolean pinned, Integer from, Integer size) {
+        log.info("Getting all compilations from repository");
         Pageable pageable = PageRequest.of(from / size, size);
         List<Compilation> compilations;
+
         if (pinned == null) {
             compilations = compilationRepository.findAll();
         } else {
             compilations = compilationRepository.findByPinnedOrderById(pinned, pageable);
         }
+
         return compilations.stream()
                 .map(c -> CompilationConverter.toDto(c, toEventShortDtoMapper(c.getEvents())))
                 .collect(Collectors.toList());
@@ -53,17 +56,19 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public CompilationDto getById(Long compId) {
-        final Compilation compilation = getCompilationFromRepository(compId);
+        log.info("Getting compilation by id from repository");
+        Compilation compilation = getCompilationFromRepository(compId);
         List<Event> events = compilation.getEvents();
 
         return CompilationConverter.toDto(compilation, toEventShortDtoMapper(events));
     }
 
     @Override
+    @Transactional
     public CompilationDto create(NewCompilationDto newCompilationDto) {
-        final List<Event> events = eventRepository.findAllById(newCompilationDto.getEvents());
-        final Compilation compilation = CompilationConverter.fromDto(newCompilationDto, events);
-        final Compilation newCompilation = compilationRepository.save(compilation);
+        List<Event> events = eventRepository.findAllById(newCompilationDto.getEvents());
+        Compilation compilation = CompilationConverter.fromDto(newCompilationDto, events);
+        Compilation newCompilation = compilationRepository.save(compilation);
         log.info("New compilation with id={} created successfully.", newCompilation.getId());
 
         return CompilationConverter.toDto(newCompilation, toEventShortDtoMapper(events));
@@ -81,6 +86,7 @@ public class CompilationServiceImpl implements CompilationService {
         Compilation compilation =
                 compilationRepository.findById(compId).orElseThrow(() -> new NotFoundParameterException("Wrong compilation"));
         List<Event> events = null;
+
         if (request.getEvents() != null) {
             events = eventRepository.findAllById(request.getEvents());
             compilation.setEvents(events);

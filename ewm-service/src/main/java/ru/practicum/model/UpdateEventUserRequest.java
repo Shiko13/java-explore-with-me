@@ -1,22 +1,26 @@
-package ru.practicum;
+package ru.practicum.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import ru.practicum.dto.LocationDto;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
-public class UpdateEventAdminRequest {
+public class UpdateEventUserRequest {
     private String annotation;
     private Long category;
     private String description;
     private LocalDateTime eventDate;
-    private LocationDto location;
+    private Location location;
     private Boolean paid;
     private Integer participantLimit;
     private Boolean requestModeration;
     private StateAction stateAction;
     private String title;
+    private Long eventId;
 }

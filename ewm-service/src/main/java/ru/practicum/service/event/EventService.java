@@ -1,7 +1,7 @@
 package ru.practicum.service.event;
 
-import ru.practicum.UpdateEventAdminRequest;
-import ru.practicum.UpdateEventUserRequest;
+import ru.practicum.model.UpdateEventAdminRequest;
+import ru.practicum.model.UpdateEventUserRequest;
 import ru.practicum.dto.EventFullDto;
 import ru.practicum.dto.EventShortDto;
 import ru.practicum.dto.NewEventDto;
@@ -29,15 +29,11 @@ public interface EventService {
 
     void deleteById(Long eventId);
 
-    EventFullDto updateEventByAdmin(Long eventId, UpdateEventAdminRequest updateEventAdminRequest);
+    EventFullDto updateByAdmin(Long eventId, UpdateEventAdminRequest updateEventAdminRequest);
 
-    EventFullDto publishEvent(Long eventId);
-
-    EventFullDto cancelEventByAdmin(Long eventId);
-
-    List<EventFullDto> getAllEventsByAdmin(List<Long> users, List<String> states,
-            List<Long> categories, LocalDateTime rangeStart,
-            LocalDateTime rangeEnd, int from, int size);
+    List<EventFullDto> getAllByAdmin(List<Long> users, List<String> states,
+                                     List<Long> categories, LocalDateTime rangeStart,
+                                     LocalDateTime rangeEnd, int from, int size);
 }
 
 

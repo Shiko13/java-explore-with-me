@@ -1,7 +1,7 @@
 package ru.practicum.converter;
 
 import lombok.experimental.UtilityClass;
-import ru.practicum.NewUserRequest;
+import ru.practicum.model.NewUserRequest;
 import ru.practicum.dto.UserDto;
 import ru.practicum.dto.UserShortDto;
 import ru.practicum.model.User;

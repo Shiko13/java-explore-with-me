@@ -3,7 +3,7 @@ package ru.practicum.controller.event;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.UpdateEventAdminRequest;
+import ru.practicum.model.UpdateEventAdminRequest;
 import ru.practicum.dto.EventFullDto;
 import ru.practicum.service.event.EventService;
 
@@ -25,7 +25,7 @@ public class AdminEventController {
             @PathVariable @Positive Long eventId,
             @RequestBody @Valid UpdateEventAdminRequest updateEventAdminRequest) {
         log.info("Get request for updating event with id={} by admin.", eventId);
-        return eventService.updateEventByAdmin(eventId, updateEventAdminRequest);
+        return eventService.updateByAdmin(eventId, updateEventAdminRequest);
     }
 
     @GetMapping
@@ -39,6 +39,6 @@ public class AdminEventController {
             @RequestParam(required = false, defaultValue = "10") @PositiveOrZero int size) {
         log.info("Get request from admin to show all users {}.", users);
 
-        return eventService.getAllEventsByAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
+        return eventService.getAllByAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
     }
 }

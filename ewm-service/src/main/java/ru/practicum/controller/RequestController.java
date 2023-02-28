@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.EventRequestStatusUpdateRequest;
-import ru.practicum.EventRequestStatusUpdateResult;
+import ru.practicum.model.EventRequestStatusUpdateRequest;
+import ru.practicum.model.EventRequestStatusUpdateResult;
 import ru.practicum.dto.ParticipationRequestDto;
 import ru.practicum.service.request.RequestService;
 
@@ -29,7 +29,7 @@ public class RequestController {
     @GetMapping("/events/{eventId}/requests")
     public List<ParticipationRequestDto> getForEvent(@NotNull @PathVariable Long userId,
                                                 @NotNull @PathVariable Long eventId) {
-        log.info("Get /users/{}/events/{eventId}/requests", userId, eventId);
+        log.info("Get /users/{}/events/{}/requests", userId, eventId);
         return requestService.getForEvent(userId, eventId);
     }
 

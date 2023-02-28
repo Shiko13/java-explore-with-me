@@ -5,7 +5,7 @@ import ru.practicum.dto.EventFullDto;
 import ru.practicum.dto.EventShortDto;
 import ru.practicum.dto.NewEventDto;
 import ru.practicum.model.User;
-import ru.practicum.State;
+import ru.practicum.model.State;
 import ru.practicum.model.Category;
 import ru.practicum.model.Event;
 
@@ -18,14 +18,6 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class EventConverter {
 
-    public static EventShortDto toDto(Event event, Map<Long, Integer> confirmedRequests,
-                                      Map<Long, Long> views) {
-        return new EventShortDto(event.getId(), event.getAnnotation(), CategoryConverter.toDto(event.getCategory()),
-                Optional.ofNullable(confirmedRequests.get(event.getId())).orElse(0),
-                event.getEventDate(), UserConverter.toShortDto(event.getInitiator()),
-                 event.getPaid(), event.getTitle(),
-                        Optional.ofNullable(views.get(event.getId())).orElse(0L));
-    }
 
     public static Event fromDto(User initiator, Category category, NewEventDto newEventDto) {
         return new Event(

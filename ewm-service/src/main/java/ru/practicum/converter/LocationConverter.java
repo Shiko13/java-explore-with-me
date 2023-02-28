@@ -12,11 +12,4 @@ public class LocationConverter {
                 dto.getLon()
         );
     }
-
-    public static LocationDto toDto(Location location) {
-        return new LocationDto(
-                location.getLat(),
-                location.getLon()
-        );
-    }
 }

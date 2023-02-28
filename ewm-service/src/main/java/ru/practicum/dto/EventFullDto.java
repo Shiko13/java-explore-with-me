@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.practicum.model.Category;
 import ru.practicum.model.Location;
-import ru.practicum.State;
+import ru.practicum.model.State;
 import ru.practicum.model.User;
 
 import javax.validation.constraints.NotNull;

@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.UserDto;
 import ru.practicum.service.user.UserService;
-import ru.practicum.NewUserRequest;
+import ru.practicum.model.NewUserRequest;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -32,7 +32,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDto> create(@RequestBody @Valid NewUserRequest request) {
-        log.info("Post /admin/users, user_name={}, user_email", request.getName(), request.getEmail());
+        log.info("Post /admin/users, user_name={}, user_email={}", request.getName(), request.getEmail());
         return new ResponseEntity<>(userService.create(request), HttpStatus.CREATED);
     }
 

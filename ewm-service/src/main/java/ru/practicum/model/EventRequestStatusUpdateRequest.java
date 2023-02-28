@@ -1,4 +1,4 @@
-package ru.practicum;
+package ru.practicum.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,8 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateCompilationRequest {
-    private List<Long> events;
-    private Boolean pinned;
-    private String title;
+public class EventRequestStatusUpdateRequest {
+    private List<Long> requestIds;
+    private Status status;
 }

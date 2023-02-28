@@ -8,7 +8,5 @@ import java.util.List;
 
 public interface CompilationRepository extends JpaRepository<Compilation, Long> {
 
-    List<Compilation> findAll();
-
     List<Compilation> findByPinnedOrderById(Boolean pinned, Pageable pageable);
 }

@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.NewUserRequest;
+import ru.practicum.model.NewUserRequest;
 import ru.practicum.converter.UserConverter;
 import ru.practicum.dto.UserDto;
 import ru.practicum.model.User;
@@ -23,6 +23,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAll(List<Long> ids, Integer from, Integer size) {
+        log.info("Getting all users from repository");
         List<User> resultList;
         if (ids.isEmpty()) {
             resultList = userRepository.findAll(PageRequest.of(from / size, size)).toList();
@@ -37,9 +38,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto create(NewUserRequest request) {
-        final User user = UserConverter.fromDto(request);
-        final User savedUser = userRepository.save(user);
-        final UserDto newDto = UserConverter.toDto(savedUser);
+        log.info("Creating user");
+        User user = UserConverter.fromDto(request);
+        User savedUser = userRepository.save(user);
+        UserDto newDto = UserConverter.toDto(savedUser);
         log.info("New user with id {}, name {} & email {} created.",
                 newDto.getId(),
                 newDto.getName(),

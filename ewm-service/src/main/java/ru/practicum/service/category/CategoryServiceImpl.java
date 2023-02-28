@@ -29,6 +29,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> getAll(Integer from, Integer size) {
+        log.info("Getting all categories from repository");
+
         return categoryRepository.findAll(PageRequest.of(from / size, size)).stream()
                 .map(CategoryConverter::toDto)
                 .collect(Collectors.toList());
@@ -41,21 +43,25 @@ public class CategoryServiceImpl implements CategoryService {
                     throw new InvalidIdException("Category", catId, LocalDateTime.now());
                 });
         log.info("Getting category with id={} from repository.", category.getId());
+
         return CategoryConverter.toDto(category);
     }
 
     @Override
     @Transactional
     public CategoryDto create(NewCategoryDto categoryDto) {
-        Category categoryToSave = CategoryConverter.fromDto(categoryDto);
+        Category category = CategoryConverter.fromDto(categoryDto);
+
         if (categoryDto.getName() != null) {
             if (categoryRepository.existsByName(categoryDto.getName())) {
                 throw new ConflictException("Category name exists", LocalDateTime.now());
             }
-            categoryToSave.setName(categoryDto.getName());
+            category.setName(categoryDto.getName());
         }
-        Category savedCategory = categoryRepository.save(categoryToSave);
+
+        Category savedCategory = categoryRepository.save(category);
         log.info("New category with id={} added successfully.", savedCategory.getId());
+
         return CategoryConverter.toDto(savedCategory);
     }
 
@@ -65,14 +71,17 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> {
                     throw new BadRequestException("Category", id, LocalDateTime.now());
                 });
+
         if (categoryDto.getName() != null) {
             if (categoryRepository.existsByName(categoryDto.getName())) {
                 throw new ConflictException("Category name exists", LocalDateTime.now());
             }
             category.setName(categoryDto.getName());
         }
+
         Category updatedCategory = categoryRepository.save(category);
         log.info("Category with id={} updated successfully.", updatedCategory.getId());
+
         return CategoryConverter.toDto(updatedCategory);
     }
 
