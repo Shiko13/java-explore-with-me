@@ -50,7 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category categoryToSave = CategoryConverter.fromDto(categoryDto);
         if (categoryDto.getName() != null) {
             if (categoryRepository.existsByName(categoryDto.getName())) {
-                throw new ConflictException("Category name exists");
+                throw new ConflictException("Category name exists", LocalDateTime.now());
             }
             categoryToSave.setName(categoryDto.getName());
         }
@@ -67,7 +67,7 @@ public class CategoryServiceImpl implements CategoryService {
                 });
         if (categoryDto.getName() != null) {
             if (categoryRepository.existsByName(categoryDto.getName())) {
-                throw new ConflictException("Category name exists");
+                throw new ConflictException("Category name exists", LocalDateTime.now());
             }
             category.setName(categoryDto.getName());
         }
