@@ -10,6 +10,7 @@ import ru.practicum.dto.CategoryDto;
 import ru.practicum.dto.NewCategoryDto;
 import ru.practicum.exception.BadRequestException;
 import ru.practicum.exception.CategoryIsNotEmptyException;
+import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.InvalidIdException;
 import ru.practicum.model.Category;
 import ru.practicum.repository.CategoryRepository;
@@ -47,6 +48,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public CategoryDto create(NewCategoryDto categoryDto) {
         Category categoryToSave = CategoryConverter.fromDto(categoryDto);
+        if (categoryDto.getName() != null) {
+            if (categoryRepository.existsByName(categoryDto.getName())) {
+                throw new ConflictException("Category name exists");
+            }
+            categoryToSave.setName(categoryDto.getName());
+        }
         Category savedCategory = categoryRepository.save(categoryToSave);
         log.info("New category with id={} added successfully.", savedCategory.getId());
         return CategoryConverter.toDto(savedCategory);
@@ -59,6 +66,9 @@ public class CategoryServiceImpl implements CategoryService {
                     throw new BadRequestException("Category", id, LocalDateTime.now());
                 });
         if (categoryDto.getName() != null) {
+            if (categoryRepository.existsByName(categoryDto.getName())) {
+                throw new ConflictException("Category name exists");
+            }
             category.setName(categoryDto.getName());
         }
         Category updatedCategory = categoryRepository.save(category);
