@@ -37,7 +37,8 @@ public class ErrorHandler {
             NonUpdatedEventException.class,
             ParticipantLimitException.class,
             CategoryIsNotEmptyException.class,
-            ForbiddenException.class
+            ForbiddenException.class,
+            ConflictException.class
             })
     @ResponseStatus(value = HttpStatus.CONFLICT)
     public ErrorResponse handleConflict(final ApiError e) {
