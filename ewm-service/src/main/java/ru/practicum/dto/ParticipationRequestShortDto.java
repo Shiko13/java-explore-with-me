@@ -9,9 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserShortDto {
+public class ParticipationRequestShortDto {
 
     private Long id;
 
-    private String name;
+    private Integer count;
 }

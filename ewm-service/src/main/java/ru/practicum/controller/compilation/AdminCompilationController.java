@@ -6,13 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.model.UpdateCompilationRequest;
 import ru.practicum.dto.CompilationDto;
 import ru.practicum.dto.NewCompilationDto;
+import ru.practicum.model.UpdateCompilationRequest;
 import ru.practicum.service.compilation.CompilationService;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 @Slf4j
 @Validated
@@ -30,7 +29,7 @@ public class AdminCompilationController {
     }
 
     @DeleteMapping("/{compId}")
-    public ResponseEntity<Void> delete(@NotNull @PathVariable Long compId) {
+    public ResponseEntity<Void> delete(@PathVariable Long compId) {
         log.info("Delete /admin/compilations/{}", compId);
         compilationService.delete(compId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

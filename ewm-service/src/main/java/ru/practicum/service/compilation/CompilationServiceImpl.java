@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.dto.ParticipationRequestShortDto;
 import ru.practicum.model.UpdateCompilationRequest;
 import ru.practicum.client.StatsClient;
 import ru.practicum.converter.CompilationConverter;
@@ -50,7 +51,7 @@ public class CompilationServiceImpl implements CompilationService {
         }
 
         return compilations.stream()
-                .map(c -> CompilationConverter.toDto(c, toEventShortDtoMapper(c.getEvents())))
+                .map(c -> CompilationConverter.toDto(c, toEventShortDtoMapper(new ArrayList<>(c.getEvents()))))
                 .collect(Collectors.toList());
     }
 
@@ -58,16 +59,16 @@ public class CompilationServiceImpl implements CompilationService {
     public CompilationDto getById(Long compId) {
         log.info("Getting compilation by id from repository");
         Compilation compilation = getCompilationFromRepository(compId);
-        List<Event> events = compilation.getEvents();
+        Set<Event> events = compilation.getEvents();
 
-        return CompilationConverter.toDto(compilation, toEventShortDtoMapper(events));
+        return CompilationConverter.toDto(compilation, toEventShortDtoMapper(new ArrayList<>(events)));
     }
 
     @Override
     @Transactional
     public CompilationDto create(NewCompilationDto newCompilationDto) {
         List<Event> events = eventRepository.findAllById(newCompilationDto.getEvents());
-        Compilation compilation = CompilationConverter.fromDto(newCompilationDto, events);
+        Compilation compilation = CompilationConverter.fromDto(newCompilationDto, new HashSet<>(events));
         Compilation newCompilation = compilationRepository.save(compilation);
         log.info("New compilation with id={} created successfully.", newCompilation.getId());
 
@@ -89,12 +90,12 @@ public class CompilationServiceImpl implements CompilationService {
 
         if (request.getEvents() != null) {
             events = eventRepository.findAllById(request.getEvents());
-            compilation.setEvents(events);
+            compilation.setEvents(new HashSet<>(events));
         }
         if (request.getPinned() != null) {
             compilation.setPinned(request.getPinned());
         }
-        if (request.getTitle() != null) {
+        if (request.getTitle() != null && !request.getTitle().isBlank()) {
             compilation.setTitle(request.getTitle());
         }
 
@@ -107,10 +108,10 @@ public class CompilationServiceImpl implements CompilationService {
             List<Long> eventIds = getEventIds(events);
             Map<Long, Long> views = statsClient.getHits(eventIds);
             Map<Long, Integer> eventsRequests = new HashMap<>();
-            List<Integer> requestList = requestRepository.countAllByStatusAndEvent_IdsIn(
+            List<ParticipationRequestShortDto> requestList = requestRepository.countAllByStatusAndEvent_IdsIn(
                     Status.CONFIRMED, eventIds);
-            for (int i = 0; i < eventIds.size(); i++) {
-                eventsRequests.put(eventIds.get(i), requestList.get(i));
+            for (int i = 0; i < requestList.size(); i++) {
+                eventsRequests.put(requestList.get(i).getId(), requestList.get(i).getCount());
             }
             eventsDto = EventConverter.toEventShortDtoList(events, eventsRequests, views);
         }
@@ -143,10 +144,10 @@ public class CompilationServiceImpl implements CompilationService {
 
     private Map<Long, Integer> getEventRequests(List<Long> eventIds) {
         Map<Long, Integer> eventsRequests = new HashMap<>();
-        List<Integer> requestList = requestRepository.countAllByStatusAndEvent_IdsIn(
+        List<ParticipationRequestShortDto> requestList = requestRepository.countAllByStatusAndEvent_IdsIn(
                 Status.CONFIRMED, eventIds);
-        for (int i = 0; i < eventIds.size(); i++) {
-            eventsRequests.put(eventIds.get(i), requestList.get(i));
+        for (int i = 0; i < requestList.size(); i++) {
+            eventsRequests.put(requestList.get(i).getId(), requestList.get(i).getCount());
         }
 
         return eventsRequests;

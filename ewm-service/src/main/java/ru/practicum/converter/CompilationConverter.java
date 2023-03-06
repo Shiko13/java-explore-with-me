@@ -8,6 +8,7 @@ import ru.practicum.model.Compilation;
 import ru.practicum.model.Event;
 
 import java.util.List;
+import java.util.Set;
 
 @UtilityClass
 public class CompilationConverter {
@@ -16,7 +17,7 @@ public class CompilationConverter {
                 compilation.getTitle(), events);
     }
 
-    public Compilation fromDto(NewCompilationDto newCompilationDto, List<Event> events) {
+    public Compilation fromDto(NewCompilationDto newCompilationDto, Set<Event> events) {
         return new Compilation(null, newCompilationDto.getPinned(),
                 newCompilationDto.getTitle(), events);
     }

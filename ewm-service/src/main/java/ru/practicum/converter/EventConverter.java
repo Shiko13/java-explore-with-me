@@ -12,7 +12,6 @@ import ru.practicum.model.Event;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @UtilityClass
@@ -53,12 +52,12 @@ public class EventConverter {
                 event.getId(),
                 event.getAnnotation(),
                 CategoryConverter.toDto(event.getCategory()),
-                Optional.ofNullable(confirmedRequests.get(event.getId())).orElse(0),
+                confirmedRequests.getOrDefault(event.getId(), 0),
                 event.getEventDate(),
                 UserConverter.toShortDto(event.getInitiator()),
                 event.getPaid(),
                 event.getTitle(),
-                Optional.ofNullable(views.get(event.getId())).orElse(0L)
+                views.getOrDefault(event.getId(), 0L)
         );
     }
 
@@ -67,12 +66,12 @@ public class EventConverter {
                                          Map<Long, Long> views) {
         return new EventFullDto(
                 event.getAnnotation(),
-                event.getCategory(),
-                Optional.ofNullable(confirmedRequests.get(event.getId())).orElse(0),
+                CategoryConverter.toDto(event.getCategory()),
+                confirmedRequests.getOrDefault(event.getId(), 0),
                 event.getDescription(),
                 event.getEventDate(),
                 event.getId(),
-                event.getInitiator(),
+                UserConverter.toDto(event.getInitiator()),
                 event.getLocation(),
                 event.getPaid(),
                 event.getParticipantLimit(),
@@ -80,7 +79,7 @@ public class EventConverter {
                 event.getRequestModeration(),
                 event.getState(),
                 event.getTitle(),
-                Optional.ofNullable(views.get(event.getId())).orElse(0L),
+                views.getOrDefault(event.getId(), 0L),
                 event.getCreatedOn()
         );
     }

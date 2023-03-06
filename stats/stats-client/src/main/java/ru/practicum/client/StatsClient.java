@@ -25,6 +25,9 @@ import java.util.stream.Collectors;
 @Service
 public class StatsClient extends BaseClient {
 
+    @Value("${app-name}")
+    private static String APP_NAME;
+
     @Autowired
     public StatsClient(@Value("${stats-server.url}") String serverUrl, RestTemplateBuilder builder) {
         super(builder
@@ -36,7 +39,7 @@ public class StatsClient extends BaseClient {
 
     public void createHit(HttpServletRequest httpServletRequest) {
         post(new EndpointHitDto(
-                "ewm-main-service",
+                APP_NAME,
                 httpServletRequest.getRequestURI(),
                 httpServletRequest.getRemoteAddr(),
                 LocalDateTime.now()));
@@ -44,7 +47,7 @@ public class StatsClient extends BaseClient {
 
     public void createHit(HttpServletRequest httpServletRequest, String uri) {
         EndpointHitDto endpointHitDto = new EndpointHitDto(
-                "ewm-main-service",
+                APP_NAME,
                 uri,
                 httpServletRequest.getRemoteAddr(),
                 LocalDateTime.now());

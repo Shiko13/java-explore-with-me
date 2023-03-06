@@ -1,7 +1,7 @@
 package ru.practicum.service.event;
 
-import ru.practicum.model.UpdateEventAdminRequest;
-import ru.practicum.model.UpdateEventUserRequest;
+import ru.practicum.dto.UpdateEventAdminRequest;
+import ru.practicum.dto.UpdateEventUserRequest;
 import ru.practicum.dto.EventFullDto;
 import ru.practicum.dto.EventShortDto;
 import ru.practicum.dto.NewEventDto;
@@ -17,7 +17,6 @@ public interface EventService {
 
     EventFullDto create(Long userId, NewEventDto eventDto);
 
-    EventFullDto update(Long userId, UpdateEventUserRequest eventRequest);
 
     EventFullDto updateByInitiator(Long userId, Long eventId, UpdateEventUserRequest updateEventUserRequest);
 

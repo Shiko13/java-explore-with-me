@@ -3,7 +3,7 @@ package ru.practicum.controller.event;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.model.UpdateEventAdminRequest;
+import ru.practicum.dto.UpdateEventAdminRequest;
 import ru.practicum.dto.EventFullDto;
 import ru.practicum.service.event.EventService;
 
@@ -35,8 +35,8 @@ public class AdminEventController {
             @RequestParam(required = false) List<Long> categories,
             @RequestParam(required = false) LocalDateTime rangeStart,
             @RequestParam(required = false) LocalDateTime rangeEnd,
-            @RequestParam(required = false, defaultValue = "0") @PositiveOrZero int from,
-            @RequestParam(required = false, defaultValue = "10") @PositiveOrZero int size) {
+            @RequestParam(defaultValue = "0") @PositiveOrZero int from,
+            @RequestParam(defaultValue = "10") @PositiveOrZero int size) {
         log.info("Get request from admin to show all users {}.", users);
 
         return eventService.getAllByAdmin(users, states, categories, rangeStart, rangeEnd, from, size);

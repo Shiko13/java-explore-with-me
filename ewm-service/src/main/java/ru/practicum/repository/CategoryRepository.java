@@ -7,6 +7,4 @@ import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<Category> findAllByIdIn(List<Long> categories);
-
-    Boolean existsByName(String name);
 }

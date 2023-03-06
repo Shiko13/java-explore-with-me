@@ -25,8 +25,6 @@ public class StatsController {
                                   @RequestParam(required = false) List<String> uris,
                                   @RequestParam(defaultValue = "false") Boolean unique) {
         log.info("Get /stats with start={}, end={}, uris={}, unique={}", start, end, uris, unique);
-        System.out.println("TESTING: /stats with start={}, end={}, uris={}, unique={} "
-                + start + " " + end + " " + uris + " " + unique);
         return statsService.getAll(start, end, uris, unique);
     }
 

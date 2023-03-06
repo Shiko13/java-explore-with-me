@@ -9,9 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.client.StatsClient;
 import ru.practicum.converter.EventConverter;
 import ru.practicum.converter.LocationConverter;
-import ru.practicum.dto.EventFullDto;
-import ru.practicum.dto.EventShortDto;
-import ru.practicum.dto.NewEventDto;
+import ru.practicum.dto.*;
 import ru.practicum.exception.*;
 import ru.practicum.model.*;
 import ru.practicum.repository.CategoryRepository;
@@ -41,6 +39,9 @@ public class EventServiceImpl implements EventService {
     public List<EventShortDto> search(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
                                       LocalDateTime rangeEnd, Boolean onlyAvailable, String sort,
                                       int from, int size, HttpServletRequest request) {
+
+        EventFilter filter = updateFilter(text, categories, paid, rangeStart, rangeEnd, onlyAvailable);
+
         String statsUri = request.getRequestURI();
         String ip = request.getRemoteAddr();
         statsClient.createHit(request, statsUri);
@@ -112,22 +113,6 @@ public class EventServiceImpl implements EventService {
                 savedEventFullDto.getId(), userId);
 
         return savedEventFullDto;
-    }
-
-    @Override
-    @Transactional
-    public EventFullDto update(Long userId, UpdateEventUserRequest eventRequest) {
-        final User initiator = getUserFromRepository(userId);
-        final Event event = getEventFromRepository(eventRequest.getEventId());
-        if (event.getState().equals(State.PUBLISHED)) {
-            throw new ValidationException(String.format("Event with status %s cannot be edit.",
-                    State.PUBLISHED));
-        }
-        update(eventRequest, event);
-        Event savedEvent = eventRepository.save(event);
-        log.info("Event with id={} updated successfully by user with id={}.", savedEvent.getId(), initiator.getId());
-
-        return getEventFullDto(savedEvent);
     }
 
     @Override
@@ -221,13 +206,13 @@ public class EventServiceImpl implements EventService {
         }
         Event updatingEvent = getEventFromRepository(eventId);
 
-        if (updateEventAdminRequest.getTitle() != null) {
+        if (updateEventAdminRequest.getTitle() != null && !updateEventAdminRequest.getTitle().isBlank()) {
             updatingEvent.setTitle(updateEventAdminRequest.getTitle());
         }
-        if (updateEventAdminRequest.getAnnotation() != null) {
+        if (updateEventAdminRequest.getAnnotation() != null && !updateEventAdminRequest.getAnnotation().isBlank()) {
             updatingEvent.setAnnotation(updateEventAdminRequest.getAnnotation());
         }
-        if (updateEventAdminRequest.getDescription() != null) {
+        if (updateEventAdminRequest.getDescription() != null && !updateEventAdminRequest.getDescription().isBlank()) {
             updatingEvent.setDescription(updateEventAdminRequest.getDescription());
         }
         if (updateEventAdminRequest.getCategory() != null) {
@@ -393,10 +378,10 @@ public class EventServiceImpl implements EventService {
 
     private Map<Long, Integer> getEventRequests(List<Long> eventIds) {
         Map<Long, Integer> eventsRequests = new HashMap<>();
-        List<Integer> requestList = requestRepository.countAllByStatusAndEvent_IdsIn(
+        List<ParticipationRequestShortDto> requestList = requestRepository.countAllByStatusAndEvent_IdsIn(
                 Status.CONFIRMED, eventIds);
-        for (int i = 0; i < eventIds.size(); i++) {
-            eventsRequests.put(eventIds.get(i), requestList.get(i));
+        for (int i = 0; i < requestList.size(); i++) {
+            eventsRequests.put(requestList.get(i).getId(), requestList.get(i).getCount());
         }
 
         return eventsRequests;
@@ -409,10 +394,10 @@ public class EventServiceImpl implements EventService {
                     .filter(Event::getRequestModeration)
                     .collect(Collectors.toList());
             List<Long> eventIds = getEventIds(filteredEvents);
-            List<Integer> requestList = requestRepository.countAllByStatusAndEvent_IdsIn(
+            List<ParticipationRequestShortDto> requestList = requestRepository.countAllByStatusAndEvent_IdsIn(
                     Status.CONFIRMED, eventIds);
-            for (int i = 0; i < eventIds.size(); i++) {
-                if ((filteredEvents.get(i).getParticipantLimit() - requestList.get(i)) > 0) {
+            for (int i = 0; i < requestList.size(); i++) {
+                if ((filteredEvents.get(i).getParticipantLimit() - requestList.get(i).getCount()) > 0) {
                     resultEvents.add(events.get(i));
                 }
             }
@@ -434,13 +419,13 @@ public class EventServiceImpl implements EventService {
             }
             event.setEventDate(eventRequest.getEventDate());
         }
-        if (eventRequest.getTitle() != null) {
+        if (eventRequest.getTitle() != null && !eventRequest.getTitle().isBlank()) {
             event.setTitle(eventRequest.getTitle());
         }
-        if (eventRequest.getAnnotation() != null) {
+        if (eventRequest.getAnnotation() != null && !eventRequest.getAnnotation().isBlank()) {
             event.setAnnotation(eventRequest.getAnnotation());
         }
-        if (eventRequest.getDescription() != null) {
+        if (eventRequest.getDescription() != null && !eventRequest.getDescription().isBlank()) {
             event.setDescription(eventRequest.getDescription());
         }
         if (eventRequest.getCategory() != null) {
@@ -450,8 +435,20 @@ public class EventServiceImpl implements EventService {
         if (eventRequest.getPaid() != null) {
             event.setPaid(eventRequest.getPaid());
         }
-        if (eventRequest.getParticipantLimit() != null) {
-            event.setParticipantLimit(eventRequest.getParticipantLimit());
-        }
+
+        event.setParticipantLimit(eventRequest.getParticipantLimit());
+    }
+
+    private EventFilter updateFilter(String text, List<Long> categories, Boolean paid,
+                                     LocalDateTime rangeStart, LocalDateTime rangeEnd,
+                                     Boolean onlyAvailable) {
+        return EventFilter.builder()
+                .text(text)
+                .categories(categories)
+                .paid(paid)
+                .rangeStart(rangeStart)
+                .rangeEnd(rangeEnd)
+                .onlyAvailable(onlyAvailable)
+                .build();
     }
 }

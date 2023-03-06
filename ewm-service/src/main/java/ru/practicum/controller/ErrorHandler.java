@@ -20,7 +20,7 @@ public class ErrorHandler {
     @ExceptionHandler(InvalidIdException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFound(final InvalidIdException e) {
-        log.error("HTTP status code 404 — " + e.getMessage());
+        log.error("HTTP status code 404 — {}", e.getMessage());
         return new ErrorResponse(e);
     }
 
@@ -28,7 +28,7 @@ public class ErrorHandler {
                 })
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ErrorResponse handleBadRequest(final ApiError e) {
-        log.error("HTTP status code 409 — " + e.getMessage());
+        log.error("HTTP status code 409 — {}", e.getMessage());
         return new ErrorResponse(e);
     }
 
@@ -42,7 +42,7 @@ public class ErrorHandler {
             })
     @ResponseStatus(value = HttpStatus.CONFLICT)
     public ErrorResponse handleConflict(final ApiError e) {
-        log.error("HTTP status code 409 - " + e.getMessage());
+        log.error("HTTP status code 409 - {}", e.getMessage());
         return new ErrorResponse(e);
     }
 
@@ -61,7 +61,7 @@ public class ErrorHandler {
     @ExceptionHandler(PersistenceException.class)
     @ResponseStatus(value = HttpStatus.CONFLICT)
     public ErrorResponse handleValidateParameterException(final PersistenceException e) {
-        log.error("HTTP status code 409: {}", e.getMessage());
+        log.error("HTTP status code 409 — {}", e.getMessage());
         ApiError apiError = new ApiError(new ArrayList<>(), e.getMessage(),
                 "Integrity constraint has been violated",
                 HttpStatus.CONFLICT, LocalDateTime.now());
