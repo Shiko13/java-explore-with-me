@@ -5,15 +5,19 @@ import ru.practicum.dto.UpdateEventUserRequest;
 import ru.practicum.dto.EventFullDto;
 import ru.practicum.dto.EventShortDto;
 import ru.practicum.dto.NewEventDto;
+import ru.practicum.model.EventParameters;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public interface EventService {
-    List<EventShortDto> search(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
-                                     LocalDateTime rangeEnd, Boolean onlyAvailable, String sort,
-                                     int from, int size, HttpServletRequest request);
+//    List<EventShortDto> search(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
+//                                     LocalDateTime rangeEnd, Boolean onlyAvailable, String sort,
+//                                     int from, int size, HttpServletRequest request);
+
+    List<EventShortDto> search(EventParameters parameters, Boolean onlyAvailable, String sort,
+                               int from, int size, HttpServletRequest request);
 
     EventFullDto create(Long userId, NewEventDto eventDto);
 

@@ -1,7 +1,9 @@
 package ru.practicum.service.event;
 
+import com.querydsl.core.BooleanBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import ru.practicum.converter.LocationConverter;
 import ru.practicum.dto.*;
 import ru.practicum.exception.*;
 import ru.practicum.model.*;
+import ru.practicum.model.QEvent;
 import ru.practicum.repository.CategoryRepository;
 import ru.practicum.repository.EventRepository;
 import ru.practicum.repository.RequestRepository;
@@ -36,8 +39,7 @@ public class EventServiceImpl implements EventService {
     private final RequestRepository requestRepository;
 
     @Override
-    public List<EventShortDto> search(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
-                                      LocalDateTime rangeEnd, Boolean onlyAvailable, String sort,
+    public List<EventShortDto> search(EventParameters parameters, Boolean onlyAvailable, String sort,
                                       int from, int size, HttpServletRequest request) {
 
         String statsUri = request.getRequestURI();
@@ -46,53 +48,40 @@ public class EventServiceImpl implements EventService {
         log.info("Hit from ip={} and uri={} during getting all events was sent to statistics.",
                 ip, statsUri);
 
-        if (rangeStart == null) {
-            rangeStart = LocalDateTime.now();
-        }
-        if (rangeEnd == null) {
-            rangeEnd = LocalDateTime.now().plusYears(100);
-        }
-
-        List<Category> categoryEntities;
-        if (categories != null) {
-            categoryEntities = categoryRepository.findAllByIdIn(categories);
-        } else {
-            categoryEntities = categoryRepository.findAll();
-        }
+        validateTime(parameters);
+        BooleanBuilder predicate = getPublicPredicate(parameters);
 
         List<Event> events;
         List<EventShortDto> eventList = new ArrayList<>();
+
         boolean sortEventDate = sort.equals(EventSort.EVENT_DATE.toString()) || sort.isBlank();
         boolean sortViews = sort.equals(EventSort.VIEWS.toString());
 
         Pageable pageable = PageRequest.of(from / size, size);
+        Page<Event> eventPage = eventRepository.findAll(predicate, pageable);
+        List<Event> eventsList  = eventPage.toList();
+
+        List<Event> resultEvents = getEventsAvailableOrNot(eventsList, onlyAvailable);
+
         if (sortEventDate) {
-            if (text.isBlank()) {
-                events = eventRepository.getAllEventsPublicByEventDateAllText(categoryEntities, paid,
-                        rangeStart, rangeEnd, pageable);
-            } else {
-                events = eventRepository.getAllEventsPublicByEventDate(text, categoryEntities, paid,
-                        rangeStart, rangeEnd, pageable);
-            }
-            List<Event> resultEvents = getEventsAvailableOrNot(events, onlyAvailable);
             eventList = getEventShortDtoList(resultEvents);
         }
-
         if (sortViews) {
-            if (text.isBlank()) {
-                events = eventRepository.getAllEventsPublicAllText(categoryEntities, paid,
-                        rangeStart, rangeEnd, pageable);
-            } else {
-                events = eventRepository.getAllEventsPublic(text, categoryEntities, paid,
-                        rangeStart, rangeEnd, pageable);
-            }
-            List<Event> resultEvents = getEventsAvailableOrNot(events, onlyAvailable);
             eventList = getEventShortDtoList(resultEvents);
             eventList.sort(Comparator.comparing(EventShortDto::getViews).reversed());
         }
-        log.info("Get all events={} after search text={}.", eventList, text);
+        log.info("Get all events={}", eventList);
 
         return eventList;
+    }
+
+    private static void validateTime(EventParameters parameters) {
+        if (parameters.getRangeStart() == null) {
+            parameters.setRangeStart(LocalDateTime.now());
+        }
+        if (parameters.getRangeEnd() == null) {
+            parameters.setRangeEnd(LocalDateTime.now().plusYears(100));
+        }
     }
 
     @Override
@@ -442,5 +431,31 @@ public class EventServiceImpl implements EventService {
         if (eventRequest.getParticipantLimit() != 0) {
             event.setParticipantLimit(eventRequest.getParticipantLimit());
         }
+    }
+
+    private BooleanBuilder getPublicPredicate(EventParameters parameters) {
+        BooleanBuilder predicate = new BooleanBuilder();
+
+        String text = parameters.getText();
+        List<Long> categories = parameters.getCategories();
+        Boolean paid = parameters.getPaid();
+        LocalDateTime rangeStart = parameters.getRangeStart();
+        LocalDateTime rangeEnd = parameters.getRangeEnd();
+
+        if (text != null) {
+            predicate.and(QEvent.event.annotation.likeIgnoreCase(text)
+                    .or(QEvent.event.description.likeIgnoreCase(text)));
+        }
+        if (!categories.isEmpty()) {
+            predicate.and(QEvent.event.category.id.in(categories));
+        }
+        if (paid != null) {
+            predicate.and(QEvent.event.paid.eq(paid));
+        }
+
+        predicate.and(QEvent.event.eventDate.after(rangeStart));
+        predicate.and(QEvent.event.eventDate.before(rangeEnd));
+
+        return predicate;
     }
 }

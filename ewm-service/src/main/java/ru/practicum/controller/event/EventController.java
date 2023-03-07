@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.model.EventParameters;
 import ru.practicum.service.event.EventService;
 import ru.practicum.dto.UpdateEventUserRequest;
 import ru.practicum.dto.EventFullDto;
@@ -39,8 +40,19 @@ public class EventController {
             @RequestParam(defaultValue = "0") @PositiveOrZero int from,
             @RequestParam(defaultValue = "10") @Positive int size,
             HttpServletRequest request) {
-        return eventService.search(
-                text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size, request);
+
+        EventParameters parameters = EventParameters.builder()
+                .text(text)
+                .categories(categories)
+                .paid(paid)
+                .rangeStart(rangeStart)
+                .rangeEnd(rangeEnd)
+                .build();
+
+        return eventService.search(parameters, onlyAvailable, sort, from, size, request);
+
+//        return eventService.search(
+//                text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size, request);
     }
 
     @PostMapping("/users/{userId}/events")
