@@ -151,18 +151,26 @@ public class RequestServiceImpl implements RequestService {
                 .collect(Collectors.toList());
 
         if (participantLimit == 0 || !event.getRequestModeration()) {
+            List<ParticipationRequest> confirmedRequestsToSave = requests.stream()
+                    .peek(r -> r.setStatus(Status.CONFIRMED))
+                    .collect(Collectors.toList());
+            requestRepository.saveAll(confirmedRequestsToSave);
+
             confirmedRequests = requests.stream()
                     .peek(r -> r.setStatus(Status.CONFIRMED))
-                    .map(requestRepository::save)
                     .map(RequestConverter::toDto)
                     .collect(Collectors.toList());
             return new EventRequestStatusUpdateResult(confirmedRequests, rejectedRequests);
         }
 
         if (status.equals(Status.REJECTED)) {
+            List<ParticipationRequest> rejectedRequestsToSave = requests.stream()
+                    .peek(r -> r.setStatus(Status.REJECTED))
+                    .collect(Collectors.toList());
+            requestRepository.saveAll(rejectedRequestsToSave);
+
             rejectedRequests = requests.stream()
                     .peek(r -> r.setStatus(Status.REJECTED))
-                    .map(requestRepository::save)
                     .map(RequestConverter::toDto)
                     .collect(Collectors.toList());
             return new EventRequestStatusUpdateResult(confirmedRequests, rejectedRequests);
@@ -170,22 +178,35 @@ public class RequestServiceImpl implements RequestService {
 
         if (status.equals(Status.CONFIRMED)) {
             if (potentialParticipants <= availableParticipants) {
+                List<ParticipationRequest> confirmedRequestsToSave = requests.stream()
+                        .peek(r -> r.setStatus(Status.CONFIRMED))
+                        .collect(Collectors.toList());
+                requestRepository.saveAll(confirmedRequestsToSave);
+
                 confirmedRequests = requests.stream()
                         .peek(r -> r.setStatus(Status.CONFIRMED))
-                        .map(requestRepository::save)
                         .map(RequestConverter::toDto)
                         .collect(Collectors.toList());
             } else {
+                List<ParticipationRequest> confirmedRequestsToSave = requests.stream()
+                        .peek(r -> r.setStatus(Status.CONFIRMED))
+                        .collect(Collectors.toList());
+                requestRepository.saveAll(confirmedRequestsToSave);
+
                 confirmedRequests = requests.stream()
                         .limit(availableParticipants)
                         .peek(r -> r.setStatus(Status.CONFIRMED))
-                        .map(requestRepository::save)
                         .map(RequestConverter::toDto)
                         .collect(Collectors.toList());
+
+                List<ParticipationRequest> rejectedRequestsToSave = requests.stream()
+                        .peek(r -> r.setStatus(Status.REJECTED))
+                        .collect(Collectors.toList());
+                requestRepository.saveAll(rejectedRequestsToSave);
+
                 rejectedRequests = requests.stream()
                         .skip(availableParticipants)
                         .peek(r -> r.setStatus(Status.REJECTED))
-                        .map(requestRepository::save)
                         .map(RequestConverter::toDto)
                         .collect(Collectors.toList());
             }

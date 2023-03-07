@@ -40,8 +40,6 @@ public class EventServiceImpl implements EventService {
                                       LocalDateTime rangeEnd, Boolean onlyAvailable, String sort,
                                       int from, int size, HttpServletRequest request) {
 
-        EventFilter filter = updateFilter(text, categories, paid, rangeStart, rangeEnd, onlyAvailable);
-
         String statsUri = request.getRequestURI();
         String ip = request.getRemoteAddr();
         statsClient.createHit(request, statsUri);
@@ -66,8 +64,8 @@ public class EventServiceImpl implements EventService {
         List<EventShortDto> eventList = new ArrayList<>();
         boolean sortEventDate = sort.equals(EventSort.EVENT_DATE.toString()) || sort.isBlank();
         boolean sortViews = sort.equals(EventSort.VIEWS.toString());
-        Pageable pageable = PageRequest.of(from / size, size);
 
+        Pageable pageable = PageRequest.of(from / size, size);
         if (sortEventDate) {
             if (text.isBlank()) {
                 events = eventRepository.getAllEventsPublicByEventDateAllText(categoryEntities, paid,
@@ -444,18 +442,5 @@ public class EventServiceImpl implements EventService {
         if (eventRequest.getParticipantLimit() != 0) {
             event.setParticipantLimit(eventRequest.getParticipantLimit());
         }
-    }
-
-    private EventFilter updateFilter(String text, List<Long> categories, Boolean paid,
-                                     LocalDateTime rangeStart, LocalDateTime rangeEnd,
-                                     Boolean onlyAvailable) {
-        return EventFilter.builder()
-                .text(text)
-                .categories(categories)
-                .paid(paid)
-                .rangeStart(rangeStart)
-                .rangeEnd(rangeEnd)
-                .onlyAvailable(onlyAvailable)
-                .build();
     }
 }
