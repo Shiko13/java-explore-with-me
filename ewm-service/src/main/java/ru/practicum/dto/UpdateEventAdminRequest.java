@@ -2,7 +2,6 @@ package ru.practicum.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import ru.practicum.dto.LocationDto;
 import ru.practicum.model.StateAction;
 
 import java.time.LocalDateTime;

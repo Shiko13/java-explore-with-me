@@ -6,16 +6,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.model.*;
 import ru.practicum.client.StatsClient;
 import ru.practicum.converter.CompilationConverter;
 import ru.practicum.converter.EventConverter;
 import ru.practicum.dto.CompilationDto;
 import ru.practicum.dto.EventShortDto;
 import ru.practicum.dto.NewCompilationDto;
-import ru.practicum.exception.NotFoundParameterException;
-import ru.practicum.repository.CompilationRepository;
 import ru.practicum.exception.BadRequestException;
+import ru.practicum.exception.NotFoundParameterException;
+import ru.practicum.model.*;
+import ru.practicum.repository.CompilationRepository;
 import ru.practicum.repository.EventRepository;
 import ru.practicum.repository.RequestRepository;
 
@@ -103,11 +103,10 @@ public class CompilationServiceImpl implements CompilationService {
         if (events != null) {
             List<Long> eventIds = getEventIds(events);
             Map<Long, Long> views = statsClient.getHits(eventIds);
-            Map<Long, Integer> eventsRequests = new HashMap<>();
             List<ParticipationRequest> requestList = requestRepository.countAllByStatusAndEvent_IdsIn(
                     Status.CONFIRMED, eventIds);
 
-            eventsRequests = requestList.stream()
+            Map<Long, Integer> eventsRequests = requestList.stream()
                     .collect(Collectors.groupingBy(ParticipationRequest::getId, Collectors.summingInt(p -> 1)));
 
             eventsDto = EventConverter.toEventShortDtoList(events, eventsRequests, views);
@@ -140,12 +139,10 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     private Map<Long, Integer> getEventRequests(List<Long> eventIds) {
-        Map<Long, Integer> eventsRequests = new HashMap<>();
         List<ParticipationRequest> requestList = requestRepository.countAllByStatusAndEvent_IdsIn(
                 Status.CONFIRMED, eventIds);
-        eventsRequests = requestList.stream()
-                .collect(Collectors.groupingBy(ParticipationRequest::getId, Collectors.summingInt(p -> 1)));
 
-        return eventsRequests;
+        return requestList.stream()
+                .collect(Collectors.groupingBy(ParticipationRequest::getId, Collectors.summingInt(p -> 1)));
     }
 }

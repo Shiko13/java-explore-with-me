@@ -67,22 +67,20 @@ public class RequestServiceImpl implements RequestService {
         }
 
         if (event.getInitiator().getId().equals(requester.getId())) {
-            throw new ValidateConflictException(String.format("User with id=%d cannot request for his own event (id=%d)",
-                    requester.getId(),
-                    event.getId()), LocalDateTime.now()
+            throw new ValidateConflictException(LocalDateTime.now()
             );
         }
 
         if (!event.getState().equals(State.PUBLISHED)) {
             throw new ValidateConflictException(
-                    "User cannot add request for unpublished event", LocalDateTime.now()
+                    LocalDateTime.now()
             );
         }
 
         Integer confirmedParticipationRequests = requestRepository.findAllByEvent_IdAndStatus(event.getId(),
                 Status.CONFIRMED).size();
         if (event.getParticipantLimit().equals(confirmedParticipationRequests)) {
-            throw new ValidateConflictException("There isn't more places in this event", LocalDateTime.now());
+            throw new ValidateConflictException(LocalDateTime.now());
         }
 
         Status status = Status.PENDING;
@@ -130,7 +128,7 @@ public class RequestServiceImpl implements RequestService {
         Integer confirmedParticipationRequests = requestRepository.findAllByEvent_IdAndStatus(event.getId(),
                 Status.CONFIRMED).size();
         if (event.getParticipantLimit().equals(confirmedParticipationRequests)) {
-            throw new ValidateConflictException("There isn't more places in this event", LocalDateTime.now());
+            throw new ValidateConflictException(LocalDateTime.now());
         }
 
         Integer participantLimit = event.getParticipantLimit();
