@@ -6,8 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.dto.ParticipationRequestShortDto;
-import ru.practicum.model.UpdateCompilationRequest;
+import ru.practicum.model.*;
 import ru.practicum.client.StatsClient;
 import ru.practicum.converter.CompilationConverter;
 import ru.practicum.converter.EventConverter;
@@ -16,10 +15,7 @@ import ru.practicum.dto.EventShortDto;
 import ru.practicum.dto.NewCompilationDto;
 import ru.practicum.exception.NotFoundParameterException;
 import ru.practicum.repository.CompilationRepository;
-import ru.practicum.model.Status;
 import ru.practicum.exception.BadRequestException;
-import ru.practicum.model.Compilation;
-import ru.practicum.model.Event;
 import ru.practicum.repository.EventRepository;
 import ru.practicum.repository.RequestRepository;
 
@@ -108,11 +104,12 @@ public class CompilationServiceImpl implements CompilationService {
             List<Long> eventIds = getEventIds(events);
             Map<Long, Long> views = statsClient.getHits(eventIds);
             Map<Long, Integer> eventsRequests = new HashMap<>();
-            List<ParticipationRequestShortDto> requestList = requestRepository.countAllByStatusAndEvent_IdsIn(
+            List<ParticipationRequest> requestList = requestRepository.countAllByStatusAndEvent_IdsIn(
                     Status.CONFIRMED, eventIds);
-            for (int i = 0; i < requestList.size(); i++) {
-                eventsRequests.put(requestList.get(i).getId(), requestList.get(i).getCount());
-            }
+
+            eventsRequests = requestList.stream()
+                    .collect(Collectors.groupingBy(ParticipationRequest::getId, Collectors.summingInt(p -> 1)));
+
             eventsDto = EventConverter.toEventShortDtoList(events, eventsRequests, views);
         }
         return eventsDto;
@@ -144,11 +141,10 @@ public class CompilationServiceImpl implements CompilationService {
 
     private Map<Long, Integer> getEventRequests(List<Long> eventIds) {
         Map<Long, Integer> eventsRequests = new HashMap<>();
-        List<ParticipationRequestShortDto> requestList = requestRepository.countAllByStatusAndEvent_IdsIn(
+        List<ParticipationRequest> requestList = requestRepository.countAllByStatusAndEvent_IdsIn(
                 Status.CONFIRMED, eventIds);
-        for (int i = 0; i < requestList.size(); i++) {
-            eventsRequests.put(requestList.get(i).getId(), requestList.get(i).getCount());
-        }
+        eventsRequests = requestList.stream()
+                .collect(Collectors.groupingBy(ParticipationRequest::getId, Collectors.summingInt(p -> 1)));
 
         return eventsRequests;
     }

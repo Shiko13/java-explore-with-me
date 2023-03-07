@@ -378,11 +378,10 @@ public class EventServiceImpl implements EventService {
 
     private Map<Long, Integer> getEventRequests(List<Long> eventIds) {
         Map<Long, Integer> eventsRequests = new HashMap<>();
-        List<ParticipationRequestShortDto> requestList = requestRepository.countAllByStatusAndEvent_IdsIn(
+        List<ParticipationRequest> requestList = requestRepository.countAllByStatusAndEvent_IdsIn(
                 Status.CONFIRMED, eventIds);
-        for (int i = 0; i < requestList.size(); i++) {
-            eventsRequests.put(requestList.get(i).getId(), requestList.get(i).getCount());
-        }
+        eventsRequests = requestList.stream()
+                .collect(Collectors.groupingBy(ParticipationRequest::getId, Collectors.summingInt(p -> 1)));
 
         return eventsRequests;
     }
@@ -394,10 +393,13 @@ public class EventServiceImpl implements EventService {
                     .filter(Event::getRequestModeration)
                     .collect(Collectors.toList());
             List<Long> eventIds = getEventIds(filteredEvents);
-            List<ParticipationRequestShortDto> requestList = requestRepository.countAllByStatusAndEvent_IdsIn(
+            List<ParticipationRequest> requestList = requestRepository.countAllByStatusAndEvent_IdsIn(
                     Status.CONFIRMED, eventIds);
+            Map<Long, Integer> eventsRequests = requestList.stream()
+                    .collect(Collectors.groupingBy(ParticipationRequest::getId, Collectors.summingInt(p -> 1)));
+
             for (int i = 0; i < requestList.size(); i++) {
-                if ((filteredEvents.get(i).getParticipantLimit() - requestList.get(i).getCount()) > 0) {
+                if ((filteredEvents.get(i).getParticipantLimit() - eventsRequests.get(i)) > 0) {
                     resultEvents.add(events.get(i));
                 }
             }
