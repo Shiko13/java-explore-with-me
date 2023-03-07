@@ -399,7 +399,11 @@ public class EventServiceImpl implements EventService {
                     .collect(Collectors.groupingBy(ParticipationRequest::getId, Collectors.summingInt(p -> 1)));
 
             for (int i = 0; i < requestList.size(); i++) {
-                if ((filteredEvents.get(i).getParticipantLimit() - eventsRequests.get(i)) > 0) {
+                if (eventsRequests.containsKey(i)) {
+                    if ((filteredEvents.get(i).getParticipantLimit() - eventsRequests.get(i)) > 0) {
+                        resultEvents.add(events.get(i));
+                    }
+                } else {
                     resultEvents.add(events.get(i));
                 }
             }
