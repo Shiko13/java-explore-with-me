@@ -51,7 +51,6 @@ public class EventServiceImpl implements EventService {
         validateTime(parameters);
         BooleanBuilder predicate = getPublicPredicate(parameters);
 
-        List<Event> events;
         List<EventShortDto> eventList = new ArrayList<>();
 
         boolean sortEventDate = sort.equals(EventSort.EVENT_DATE.toString()) || sort.isBlank();
@@ -73,15 +72,6 @@ public class EventServiceImpl implements EventService {
         log.info("Get all events={}", eventList);
 
         return eventList;
-    }
-
-    private static void validateTime(EventParameters parameters) {
-        if (parameters.getRangeStart() == null) {
-            parameters.setRangeStart(LocalDateTime.now());
-        }
-        if (parameters.getRangeEnd() == null) {
-            parameters.setRangeEnd(LocalDateTime.now().plusYears(100));
-        }
     }
 
     @Override
@@ -260,42 +250,14 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventFullDto> getAllByAdmin(List<Long> users, List<String> states, List<Long> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size) {
-        if (rangeStart == null) {
-            rangeStart = LocalDateTime.now();
-        }
-        if (rangeEnd == null) {
-            rangeEnd = LocalDateTime.now().plusYears(100);
-        }
+    public List<EventFullDto> getAllByAdmin(AdminEventParameters parameters, int from, int size) {
+        validateTimeAdmin(parameters);
 
         PageRequest pageRequest = PageRequest.of(from / size, size);
-        List<Category> categoryEntities;
+        BooleanBuilder predicate = getAdminPredicate(parameters);
+        Page<Event> pageEvents = eventRepository.findAll(predicate, pageRequest);
+        List<Event> events = pageEvents.toList();
 
-        if (categories != null && !categories.isEmpty()) {
-            categoryEntities = categoryRepository.findAllByIdIn(categories);
-        } else {
-            categoryEntities = categoryRepository.findAll();
-        }
-
-        List<User> userEntities;
-        if (users != null && !users.isEmpty()) {
-            userEntities = userRepository.findAllByIdIn(users);
-        } else {
-            userEntities = userRepository.findAll();
-        }
-
-        List<State> statesEnum = new ArrayList<>();
-        if (states != null) {
-            for (String state: states) {
-                State status = State.valueOf(state);
-                statesEnum.add(status);
-            }
-        } else {
-            statesEnum.addAll(Arrays.asList(State.values()));
-        }
-
-        List<Event> events = eventRepository.getAllEventsByAdmin(userEntities, statesEnum,
-                categoryEntities, rangeStart, rangeEnd, pageRequest);
         List<EventFullDto> eventList = getEventFullDtoList(events);
         log.info("Get all events list with length={} by admin request.", eventList.size());
 
@@ -364,13 +326,11 @@ public class EventServiceImpl implements EventService {
     }
 
     private Map<Long, Integer> getEventRequests(List<Long> eventIds) {
-        Map<Long, Integer> eventsRequests = new HashMap<>();
         List<ParticipationRequest> requestList = requestRepository.countAllByStatusAndEvent_IdsIn(
                 Status.CONFIRMED, eventIds);
-        eventsRequests = requestList.stream()
-                .collect(Collectors.groupingBy(ParticipationRequest::getId, Collectors.summingInt(p -> 1)));
 
-        return eventsRequests;
+        return requestList.stream()
+                .collect(Collectors.groupingBy(ParticipationRequest::getId, Collectors.summingInt(p -> 1)));
     }
 
     private List<Event> getEventsAvailableOrNot(List<Event> events, boolean available) {
@@ -457,5 +417,49 @@ public class EventServiceImpl implements EventService {
         predicate.and(QEvent.event.eventDate.before(rangeEnd));
 
         return predicate;
+    }
+
+    private BooleanBuilder getAdminPredicate(AdminEventParameters parameters) {
+        BooleanBuilder predicate = new BooleanBuilder();
+
+        List<Long> users = parameters.getUsers();
+        List<String> states = parameters.getStates();
+        List<State> stateList = states.stream().map(State::valueOf).collect(Collectors.toList());
+        List<Long> categories = parameters.getCategories();
+        LocalDateTime rangeStart = parameters.getRangeStart();
+        LocalDateTime rangeEnd = parameters.getRangeEnd();
+
+        if (!users.isEmpty()) {
+            predicate.and(QEvent.event.initiator.id.in(users));
+        }
+        if (!states.isEmpty()) {
+            predicate.and(QEvent.event.state.in(stateList));
+        }
+        if (!categories.isEmpty()) {
+            predicate.and(QEvent.event.category.id.in(categories));
+        }
+
+        predicate.and(QEvent.event.eventDate.after(rangeStart));
+        predicate.and(QEvent.event.eventDate.before(rangeEnd));
+
+        return predicate;
+    }
+
+    private static void validateTime(EventParameters parameters) {
+        if (parameters.getRangeStart() == null) {
+            parameters.setRangeStart(LocalDateTime.now());
+        }
+        if (parameters.getRangeEnd() == null) {
+            parameters.setRangeEnd(LocalDateTime.now().plusYears(100));
+        }
+    }
+
+    private static void validateTimeAdmin(AdminEventParameters parameters) {
+        if (parameters.getRangeStart() == null) {
+            parameters.setRangeStart(LocalDateTime.now());
+        }
+        if (parameters.getRangeEnd() == null) {
+            parameters.setRangeEnd(LocalDateTime.now().plusYears(100));
+        }
     }
 }

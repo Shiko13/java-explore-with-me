@@ -50,9 +50,6 @@ public class EventController {
                 .build();
 
         return eventService.search(parameters, onlyAvailable, sort, from, size, request);
-
-//        return eventService.search(
-//                text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size, request);
     }
 
     @PostMapping("/users/{userId}/events")
