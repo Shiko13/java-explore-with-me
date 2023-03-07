@@ -424,7 +424,10 @@ public class EventServiceImpl implements EventService {
 
         List<Long> users = parameters.getUsers();
         List<String> states = parameters.getStates();
-        List<State> stateList = states.stream().map(State::valueOf).collect(Collectors.toList());
+        List<State> stateList = new ArrayList<>();
+        if (states != null) {
+            stateList = states.stream().map(State::valueOf).collect(Collectors.toList());
+        }
         List<Long> categories = parameters.getCategories();
         LocalDateTime rangeStart = parameters.getRangeStart();
         LocalDateTime rangeEnd = parameters.getRangeEnd();
@@ -432,7 +435,7 @@ public class EventServiceImpl implements EventService {
         if (!users.isEmpty()) {
             predicate.and(QEvent.event.initiator.id.in(users));
         }
-        if (!states.isEmpty()) {
+        if (!Objects.requireNonNull(states).isEmpty()) {
             predicate.and(QEvent.event.state.in(stateList));
         }
         if (!categories.isEmpty()) {
