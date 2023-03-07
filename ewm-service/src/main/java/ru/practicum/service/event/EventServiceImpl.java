@@ -437,8 +437,9 @@ public class EventServiceImpl implements EventService {
         if (eventRequest.getPaid() != null) {
             event.setPaid(eventRequest.getPaid());
         }
-
-        event.setParticipantLimit(eventRequest.getParticipantLimit());
+        if (eventRequest.getParticipantLimit() != 0) {
+            event.setParticipantLimit(eventRequest.getParticipantLimit());
+        }
     }
 
     private EventFilter updateFilter(String text, List<Long> categories, Boolean paid,
