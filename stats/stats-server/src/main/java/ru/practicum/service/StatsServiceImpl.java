@@ -6,9 +6,10 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.converter.EndpointHitConverter;
-import ru.practicum.dto.EndpointHitDto;
-import ru.practicum.dto.ViewStats;
+import dto.EndpointHitDto;
+import dto.ViewStats;
 import ru.practicum.model.App;
+import ru.practicum.model.EndpointHit;
 import ru.practicum.repository.AppRepository;
 import ru.practicum.repository.StatsRepository;
 
@@ -25,11 +26,12 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     @Transactional
-    public void create(EndpointHitDto endpointHitDto) {
+    public EndpointHit create(EndpointHitDto endpointHitDto) {
         log.info("Start method create in StatsServiceImpl with endpointHitDto={}", endpointHitDto);
         App app = appRepository.findByName(endpointHitDto.getApp())
                         .orElseGet(() -> appRepository.save(new App(null, endpointHitDto.getApp())));
-        statsRepository.save(EndpointHitConverter.toEndpointHit(endpointHitDto, app));
+        EndpointHit endpointHit = statsRepository.save(EndpointHitConverter.toEndpointHit(endpointHitDto, app));
+        return endpointHit;
     }
 
     @Override

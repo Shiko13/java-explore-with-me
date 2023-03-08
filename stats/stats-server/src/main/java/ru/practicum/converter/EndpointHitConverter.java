@@ -1,7 +1,7 @@
 package ru.practicum.converter;
 
 import lombok.experimental.UtilityClass;
-import ru.practicum.dto.EndpointHitDto;
+import dto.EndpointHitDto;
 import ru.practicum.model.App;
 import ru.practicum.model.EndpointHit;
 
