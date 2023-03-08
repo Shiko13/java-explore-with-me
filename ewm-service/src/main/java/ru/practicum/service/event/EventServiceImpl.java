@@ -432,13 +432,13 @@ public class EventServiceImpl implements EventService {
         LocalDateTime rangeStart = parameters.getRangeStart();
         LocalDateTime rangeEnd = parameters.getRangeEnd();
 
-        if (!users.isEmpty()) {
+        if (users != null && !users.isEmpty()) {
             predicate.and(QEvent.event.initiator.id.in(users));
         }
         if (!states.isEmpty()) {
             predicate.and(QEvent.event.state.in(stateList));
         }
-        if (!categories.isEmpty()) {
+        if (categories != null && !categories.isEmpty()) {
             predicate.and(QEvent.event.category.id.in(categories));
         }
 
