@@ -72,7 +72,6 @@ public class StatsClient extends BaseClient {
         while (id.hasNext()) {
             sbUrl.append("/events/").append(id.next());
         }
-        System.out.println("TESTING: sbUrl = " + sbUrl);
 
         ResponseEntity<Object> objects = get("stats?start={start}&end={end}&uris={uris}&unique={unique}", Map.of(
                 "start", start,

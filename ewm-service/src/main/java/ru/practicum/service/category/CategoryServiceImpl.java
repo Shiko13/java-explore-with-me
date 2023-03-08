@@ -68,11 +68,9 @@ public class CategoryServiceImpl implements CategoryService {
                 });
 
         category.setName(categoryDto.getName());
+        log.info("Category with id={} updated successfully.", category.getId());
 
-        Category updatedCategory = categoryRepository.save(category);
-        log.info("Category with id={} updated successfully.", updatedCategory.getId());
-
-        return CategoryConverter.toDto(updatedCategory);
+        return CategoryConverter.toDto(category);
     }
 
     @Override

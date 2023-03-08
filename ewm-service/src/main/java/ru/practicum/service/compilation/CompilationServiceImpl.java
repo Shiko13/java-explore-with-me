@@ -41,14 +41,39 @@ public class CompilationServiceImpl implements CompilationService {
         List<Compilation> compilations;
 
         if (pinned == null) {
-            compilations = compilationRepository.findAll();
+            compilations = compilationRepository.findAll(pageable).toList();
         } else {
             compilations = compilationRepository.findByPinnedOrderById(pinned, pageable);
         }
 
-        return compilations.stream()
-                .map(c -> CompilationConverter.toDto(c, toEventShortDtoMapper(new ArrayList<>(c.getEvents()))))
-                .collect(Collectors.toList());
+        Map<Long, Set<Long>> compilationsWithEvents = compilations.stream()
+                .collect(Collectors.toMap(Compilation::getId, c -> c.getEvents().stream()
+                        .map(Event::getId)
+                        .collect(Collectors.toSet())
+                ));
+
+        Set<Event> events = new HashSet<>();
+
+        for (Compilation compilation : compilations) {
+            Set<Event> tempEvents = compilation.getEvents();
+            events.addAll(tempEvents);
+        }
+
+        List<EventShortDto> eventShortDtoList = toEventShortDtoMapper(new ArrayList<>(events));
+        List<CompilationDto> compilationDtoArrayList = new ArrayList<>();
+
+        for (Compilation compilation : compilations) {
+            Set<Long> ids = compilationsWithEvents.get(compilation.getId());
+            List<EventShortDto> eventShortDtoArrayList = new ArrayList<>();
+            for (EventShortDto eventShortDto : eventShortDtoList) {
+                if (ids.contains(eventShortDto.getId())) {
+                    eventShortDtoArrayList.add(eventShortDto);
+                }
+            }
+            compilationDtoArrayList.add(CompilationConverter.toDto(compilation, eventShortDtoArrayList));
+        }
+
+        return compilationDtoArrayList;
     }
 
     @Override
