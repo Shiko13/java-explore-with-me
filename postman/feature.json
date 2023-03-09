@@ -1,0 +1,1039 @@
+{
+  "info": {
+    "_postman_id": "adee712d-9f72-49a3-b71d-341f812fc9c2",
+    "name": "feature",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "23625990"
+  },
+  "item": [
+    {
+      "name": "Добавление первого пользователя",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+              "});\r",
+              "pm.test(\"Test create user\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.id, '\"id\" field').to.eql(1);\r",
+              "    pm.expect(jsonData.name, '\"name\" field').to.eql('Сергей Терентьев');\r",
+              "    pm.expect(jsonData.email, '\"email\" field').to.eql('sergei.terentev@yandex-practicum.ru');\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"sergei.terentev@yandex-practicum.ru\",\n  \"name\": \"Сергей Терентьев\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/admin/users",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "admin",
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Добавление второго пользователя",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+              "});\r",
+              "pm.test(\"Test create user\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.id, '\"id\" field').to.eql(2);\r",
+              "    pm.expect(jsonData.name, '\"name\" field').to.eql('Анна Батова');\r",
+              "    pm.expect(jsonData.email, '\"email\" field').to.eql('anna.batova@yandex-practicum.ru');\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"anna.batova@yandex-practicum.ru\",\n  \"name\": \"Анна Батова\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/admin/users",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "admin",
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Добавление новой категории",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+              "});\r",
+              "pm.test(\"Test create category\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.id, '\"id\" field').to.eql(1);\r",
+              "    pm.expect(jsonData.name, '\"name\" field').to.eql('Экстрим');\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Экстрим\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/admin/categories",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "admin",
+            "categories"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Добавление нового события",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+              "});\r",
+              "pm.test(\"Test create event\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.id, '\"id\" field').to.eql(1);\r",
+              "    pm.expect(jsonData.annotation, '\"annotation\" field').to.eql('Сплав на байдарках похож на полёт');\r",
+              "    pm.expect(jsonData.category.id, '\"category.id\" field').to.eql(1);\r",
+              "    pm.expect(jsonData.category.name, '\"category.name\" field').to.eql('Экстрим');\r",
+              "    pm.expect(jsonData.confirmedRequests, '\"confirmedRequests\" field').to.eql(0);\r",
+              "    pm.expect(jsonData.description, '\"description\" field').to.eql('Сплав на байдарках похож на полёт. На спокойной воде — это парение. На бурной, порожистой — выполнение фигур высшего пилотажа. И то, и другое дарят чувство обновления, феерические эмоции, яркие впечатления.');\r",
+              "    pm.expect(jsonData.eventDate, '\"eventDate\" field').is.not.null;\r",
+              "    pm.expect(jsonData.initiator.id, '\"initiator.id\" field').to.eql(1);\r",
+              "    pm.expect(jsonData.initiator.name, '\"initiator.name\" field').to.eql('Сергей Терентьев');\r",
+              "    pm.expect(jsonData.initiator.email, '\"initiator.email\" field').to.eql('sergei.terentev@yandex-practicum.ru');\r",
+              "    pm.expect(jsonData.location.lat, '\"location.lat\" field').to.eql(55.754167);\r",
+              "    pm.expect(jsonData.location.lon, '\"location.lon\" field').to.eql(37.62);\r",
+              "    pm.expect(jsonData.paid, '\"paid\" field').to.eql(true);\r",
+              "    pm.expect(jsonData.participantLimit, '\"participantLimit\" field').to.eql(10);\r",
+              "    pm.expect(jsonData.publishedOn, '\"publishedOn\" field').is.null;\r",
+              "    pm.expect(jsonData.requestModeration, '\"requestModeration\" field').to.eql(true);\r",
+              "    pm.expect(jsonData.state, '\"state\" field').to.eql('PENDING');\r",
+              "    pm.expect(jsonData.title, '\"title\" field').to.eql('Сплав на байдарках');\r",
+              "    pm.expect(jsonData.views, '\"views\" field').to.eql(0);\r",
+              "    pm.expect(jsonData.createdOn, '\"createdOn\" field').is.not.null;\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"annotation\": \"Сплав на байдарках похож на полёт\",\n  \"category\": 1,\n  \"description\": \"Сплав на байдарках похож на полёт. На спокойной воде — это парение. На бурной, порожистой — выполнение фигур высшего пилотажа. И то, и другое дарят чувство обновления, феерические эмоции, яркие впечатления.\",\n  \"eventDate\": \"2023-05-05 12:00:00\",\n  \"location\": {\n    \"lat\": 55.754167,\n    \"lon\": 37.62\n  },\n  \"title\": \"Сплав на байдарках\",\n  \"paid\": true,\n  \"participantLimit\": 10,\n  \"requestModeration\": true\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/users/:userId/events",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "users",
+            ":userId",
+            "events"
+          ],
+          "variable": [
+            {
+              "key": "userId",
+              "value": "1",
+              "description": "(Required) id текущего пользователя"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Добавление первого комментария",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+              "});\r",
+              "pm.test(\"Test create comment\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.id, '\"id\" field').to.eql(1);\r",
+              "    pm.expect(jsonData.text, '\"text\" field').to.eql('Amazing event!');\r",
+              "    pm.expect(jsonData.authorId, '\"authorId\" field').to.eql(2);\r",
+              "    pm.expect(jsonData.eventId, '\"eventId\" field').to.eql(1);\r",
+              "    pm.expect(jsonData.created, '\"created\" field').is.not.null;\r",
+              "    pm.expect(jsonData.updated, '\"updated\" field').is.null;\r",
+              "    pm.expect(jsonData.visible, '\"visible\" field').to.eql(true);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"text\": \"Amazing event!\",\r\n  \"authorId\": 2\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/events/:eventId/comments",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "events",
+            ":eventId",
+            "comments"
+          ],
+          "variable": [
+            {
+              "key": "eventId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Добавление второго комментария",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+              "});\r",
+              "pm.test(\"Test create comment\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.id, '\"id\" field').to.eql(2);\r",
+              "    pm.expect(jsonData.text, '\"text\" field').to.eql('Terrible event!');\r",
+              "    pm.expect(jsonData.authorId, '\"authorId\" field').to.eql(2);\r",
+              "    pm.expect(jsonData.eventId, '\"eventId\" field').to.eql(1);\r",
+              "    pm.expect(jsonData.created, '\"created\" field').is.not.null;\r",
+              "    pm.expect(jsonData.updated, '\"updated\" field').is.null;\r",
+              "    pm.expect(jsonData.visible, '\"visible\" field').to.eql(true);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"text\": \"Terrible event!\",\r\n  \"authorId\": 2\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/events/:eventId/comments",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "events",
+            ":eventId",
+            "comments"
+          ],
+          "variable": [
+            {
+              "key": "eventId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Изменение второго комментария",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+              "});\r",
+              "pm.test(\"Test create comment\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.id, '\"id\" field').to.eql(2);\r",
+              "    pm.expect(jsonData.text, '\"text\" field').to.eql('Sorry, zrya bykanul :)');\r",
+              "    pm.expect(jsonData.authorId, '\"authorId\" field').to.eql(2);\r",
+              "    pm.expect(jsonData.eventId, '\"eventId\" field').to.eql(1);\r",
+              "    pm.expect(jsonData.created, '\"created\" field').is.not.null;\r",
+              "    pm.expect(jsonData.updated, '\"updated\" field').is.not.null;\r",
+              "    pm.expect(jsonData.visible, '\"visible\" field').to.eql(true);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"id\": 2,\r\n  \"text\": \"Sorry, zrya bykanul :)\",\r\n  \"authorId\": 2\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/events/:eventId/comments",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "events",
+            ":eventId",
+            "comments"
+          ],
+          "variable": [
+            {
+              "key": "eventId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Скрытие второго комментария",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+              "});\r",
+              "pm.test(\"Test create comment\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.id, '\"id\" field').to.eql(2);\r",
+              "    pm.expect(jsonData.text, '\"text\" field').to.eql('Sorry, zrya bykanul :)');\r",
+              "    pm.expect(jsonData.authorId, '\"authorId\" field').to.eql(2);\r",
+              "    pm.expect(jsonData.eventId, '\"eventId\" field').to.eql(1);\r",
+              "    pm.expect(jsonData.created, '\"created\" field').is.not.null;\r",
+              "    pm.expect(jsonData.updated, '\"updated\" field').is.not.null;\r",
+              "    pm.expect(jsonData.visible, '\"visible\" field').to.eql(false);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"id\": 2,\r\n  \"text\": \"Sorry, zrya bykanul :)\",\r\n  \"authorId\": 2\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/admin/events/:eventId/comments/:commentId/hide",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "admin",
+            "events",
+            ":eventId",
+            "comments",
+            ":commentId",
+            "hide"
+          ],
+          "variable": [
+            {
+              "key": "eventId",
+              "value": "1"
+            },
+            {
+              "key": "commentId",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Показывание второго комментария",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+              "});\r",
+              "pm.test(\"Test create comment\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.id, '\"id\" field').to.eql(2);\r",
+              "    pm.expect(jsonData.text, '\"text\" field').to.eql('Sorry, zrya bykanul :)');\r",
+              "    pm.expect(jsonData.authorId, '\"authorId\" field').to.eql(2);\r",
+              "    pm.expect(jsonData.eventId, '\"eventId\" field').to.eql(1);\r",
+              "    pm.expect(jsonData.created, '\"created\" field').is.not.null;\r",
+              "    pm.expect(jsonData.updated, '\"updated\" field').is.not.null;\r",
+              "    pm.expect(jsonData.visible, '\"visible\" field').to.eql(true);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"id\": 2,\r\n  \"text\": \"Sorry, zrya bykanul :)\",\r\n  \"authorId\": 2\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/admin/events/:eventId/comments/:commentId/show",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "admin",
+            "events",
+            ":eventId",
+            "comments",
+            ":commentId",
+            "show"
+          ],
+          "variable": [
+            {
+              "key": "eventId",
+              "value": "1"
+            },
+            {
+              "key": "commentId",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Получение комментария по id",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+              "});\r",
+              "pm.test(\"Test create comment\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.id, '\"id\" field').to.eql(2);\r",
+              "    pm.expect(jsonData.text, '\"text\" field').to.eql('Sorry, zrya bykanul :)');\r",
+              "    pm.expect(jsonData.authorId, '\"authorId\" field').to.eql(2);\r",
+              "    pm.expect(jsonData.eventId, '\"eventId\" field').to.eql(1);\r",
+              "    pm.expect(jsonData.created, '\"created\" field').is.not.null;\r",
+              "    pm.expect(jsonData.updated, '\"updated\" field').is.not.null;\r",
+              "    pm.expect(jsonData.visible, '\"visible\" field').to.eql(true);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/events/:eventId/comments/:commentId/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "events",
+            ":eventId",
+            "comments",
+            ":commentId",
+            ""
+          ],
+          "variable": [
+            {
+              "key": "eventId",
+              "value": "1"
+            },
+            {
+              "key": "commentId",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Получение комментария по id события",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+              "});\r",
+              "pm.test(\"Test create comment\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.length, 'comments count in total').to.eql(2);\r",
+              "\r",
+              "    pm.expect(jsonData[0].id, 'result[0]: \"id\" field').to.eql(2);\r",
+              "    pm.expect(jsonData[0].text, 'result[0]: \"text\" field').to.eql('Sorry, zrya bykanul :)');\r",
+              "    pm.expect(jsonData[0].authorId, 'result[0]: \"authorId\" field').to.eql(2);\r",
+              "    pm.expect(jsonData[0].eventId, 'result[0]: \"eventId\" field').to.eql(1);\r",
+              "    pm.expect(jsonData[0].created, 'result[0]: \"created\" field').is.not.null;\r",
+              "    pm.expect(jsonData[0].updated, 'result[0]: \"updated\" field').is.not.null;\r",
+              "    pm.expect(jsonData[0].visible, 'result[0]: \"visible\" field').to.eql(true);\r",
+              "\r",
+              "    pm.expect(jsonData[1].id, 'result[1]: \"id\" field').to.eql(1);\r",
+              "    pm.expect(jsonData[1].text, 'result[1]: \"text\" field').to.eql('Amazing event!');\r",
+              "    pm.expect(jsonData[1].authorId, 'result[1]: \"authorId\" field').to.eql(2);\r",
+              "    pm.expect(jsonData[1].eventId, 'result[1]: \"eventId\" field').to.eql(1);\r",
+              "    pm.expect(jsonData[1].created, 'result[1]: \"created\" field').is.not.null;\r",
+              "    pm.expect(jsonData[1].updated, 'result[1]: \"updated\" field').is.null;\r",
+              "    pm.expect(jsonData[1].visible, 'result[1]: \"visible\" field').to.eql(true);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/events/:eventId/comments/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "events",
+            ":eventId",
+            "comments",
+            ""
+          ],
+          "variable": [
+            {
+              "key": "eventId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Получение комментария по id пользователя",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+              "});\r",
+              "pm.test(\"Test create comment\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.length, 'comments count in total').to.eql(2);\r",
+              "\r",
+              "    pm.expect(jsonData[0].id, 'result[0]: \"id\" field').to.eql(2);\r",
+              "    pm.expect(jsonData[0].text, 'result[0]: \"text\" field').to.eql('Sorry, zrya bykanul :)');\r",
+              "    pm.expect(jsonData[0].authorId, 'result[0]: \"authorId\" field').to.eql(2);\r",
+              "    pm.expect(jsonData[0].eventId, 'result[0]: \"eventId\" field').to.eql(1);\r",
+              "    pm.expect(jsonData[0].created, 'result[0]: \"created\" field').is.not.null;\r",
+              "    pm.expect(jsonData[0].updated, 'result[0]: \"updated\" field').is.not.null;\r",
+              "    pm.expect(jsonData[0].visible, 'result[0]: \"visible\" field').to.eql(true);\r",
+              "\r",
+              "    pm.expect(jsonData[1].id, 'result[1]: \"id\" field').to.eql(1);\r",
+              "    pm.expect(jsonData[1].text, 'result[1]: \"text\" field').to.eql('Amazing event!');\r",
+              "    pm.expect(jsonData[1].authorId, 'result[1]: \"authorId\" field').to.eql(2);\r",
+              "    pm.expect(jsonData[1].eventId, 'result[1]: \"eventId\" field').to.eql(1);\r",
+              "    pm.expect(jsonData[1].created, 'result[1]: \"created\" field').is.not.null;\r",
+              "    pm.expect(jsonData[1].updated, 'result[1]: \"updated\" field').is.null;\r",
+              "    pm.expect(jsonData[1].visible, 'result[1]: \"visible\" field').to.eql(true);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/events/:userId/comments/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "events",
+            ":userId",
+            "comments",
+            ""
+          ],
+          "variable": [
+            {
+              "key": "userId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Получение всех комментариев",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+              "});\r",
+              "pm.test(\"Test create comment\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.length, 'comments count in total').to.eql(2);\r",
+              "\r",
+              "    pm.expect(jsonData[0].id, 'result[0]: \"id\" field').to.eql(2);\r",
+              "    pm.expect(jsonData[0].text, 'result[0]: \"text\" field').to.eql('Sorry, zrya bykanul :)');\r",
+              "    pm.expect(jsonData[0].authorId, 'result[0]: \"authorId\" field').to.eql(2);\r",
+              "    pm.expect(jsonData[0].eventId, 'result[0]: \"eventId\" field').to.eql(1);\r",
+              "    pm.expect(jsonData[0].created, 'result[0]: \"created\" field').is.not.null;\r",
+              "    pm.expect(jsonData[0].updated, 'result[0]: \"updated\" field').is.not.null;\r",
+              "    pm.expect(jsonData[0].visible, 'result[0]: \"visible\" field').to.eql(true);\r",
+              "\r",
+              "    pm.expect(jsonData[1].id, 'result[1]: \"id\" field').to.eql(1);\r",
+              "    pm.expect(jsonData[1].text, 'result[1]: \"text\" field').to.eql('Amazing event!');\r",
+              "    pm.expect(jsonData[1].authorId, 'result[1]: \"authorId\" field').to.eql(2);\r",
+              "    pm.expect(jsonData[1].eventId, 'result[1]: \"eventId\" field').to.eql(1);\r",
+              "    pm.expect(jsonData[1].created, 'result[1]: \"created\" field').is.not.null;\r",
+              "    pm.expect(jsonData[1].updated, 'result[1]: \"updated\" field').is.null;\r",
+              "    pm.expect(jsonData[1].visible, 'result[1]: \"visible\" field').to.eql(true);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/admin/comments",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "admin",
+            "comments"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Получение всех комментариев с фильтрацией",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+              "});\r",
+              "pm.test(\"Test create comment\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.length, 'comments count in total').to.eql(2);\r",
+              "\r",
+              "    pm.expect(jsonData[0].id, 'result[0]: \"id\" field').to.eql(2);\r",
+              "    pm.expect(jsonData[0].text, 'result[0]: \"text\" field').to.eql('Sorry, zrya bykanul :)');\r",
+              "    pm.expect(jsonData[0].authorId, 'result[0]: \"authorId\" field').to.eql(2);\r",
+              "    pm.expect(jsonData[0].eventId, 'result[0]: \"eventId\" field').to.eql(1);\r",
+              "    pm.expect(jsonData[0].created, 'result[0]: \"created\" field').is.not.null;\r",
+              "    pm.expect(jsonData[0].updated, 'result[0]: \"updated\" field').is.not.null;\r",
+              "    pm.expect(jsonData[0].visible, 'result[0]: \"visible\" field').to.eql(true);\r",
+              "\r",
+              "    pm.expect(jsonData[1].id, 'result[1]: \"id\" field').to.eql(1);\r",
+              "    pm.expect(jsonData[1].text, 'result[1]: \"text\" field').to.eql('Amazing event!');\r",
+              "    pm.expect(jsonData[1].authorId, 'result[1]: \"authorId\" field').to.eql(2);\r",
+              "    pm.expect(jsonData[1].eventId, 'result[1]: \"eventId\" field').to.eql(1);\r",
+              "    pm.expect(jsonData[1].created, 'result[1]: \"created\" field').is.not.null;\r",
+              "    pm.expect(jsonData[1].updated, 'result[1]: \"updated\" field').is.null;\r",
+              "    pm.expect(jsonData[1].visible, 'result[1]: \"visible\" field').to.eql(true);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/admin/comments/filter?visible=true",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "admin",
+            "comments",
+            "filter"
+          ],
+          "query": [
+            {
+              "key": "visible",
+              "value": "true"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Удаление комментария по id",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/admin/events/:eventId/comments/:commentId/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "admin",
+            "events",
+            ":eventId",
+            "comments",
+            ":commentId",
+            ""
+          ],
+          "variable": [
+            {
+              "key": "eventId",
+              "value": "1"
+            },
+            {
+              "key": "commentId",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Удаление комментария по id пользователя, id события и id комментария",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/users/:userId/events/:eventId/comments/:commentId/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "users",
+            ":userId",
+            "events",
+            ":eventId",
+            "comments",
+            ":commentId",
+            ""
+          ],
+          "variable": [
+            {
+              "key": "userId",
+              "value": "2"
+            },
+            {
+              "key": "eventId",
+              "value": "1"
+            },
+            {
+              "key": "commentId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
