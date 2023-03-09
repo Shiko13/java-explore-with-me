@@ -195,7 +195,7 @@
               "    pm.expect(jsonData.confirmedRequests, '\"confirmedRequests\" field').to.eql(0);\r",
               "    pm.expect(jsonData.description, '\"description\" field').to.eql('Сплав на байдарках похож на полёт. На спокойной воде — это парение. На бурной, порожистой — выполнение фигур высшего пилотажа. И то, и другое дарят чувство обновления, феерические эмоции, яркие впечатления.');\r",
               "    pm.expect(jsonData.eventDate, '\"eventDate\" field').is.not.null;\r",
-              "    pm.expect(jsonData.initiator.id, '\"initiator.id\" field').to.eql(1);\r",
+              "    pm.expect(jsonData.initiator.id, '\"initiator.id\" field').to.eql(63);\r",
               "    pm.expect(jsonData.initiator.name, '\"initiator.name\" field').to.eql('Сергей Терентьев');\r",
               "    pm.expect(jsonData.initiator.email, '\"initiator.email\" field').to.eql('sergei.terentev@yandex-practicum.ru');\r",
               "    pm.expect(jsonData.location.lat, '\"location.lat\" field').to.eql(55.754167);\r",
