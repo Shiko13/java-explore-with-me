@@ -250,7 +250,7 @@
           "variable": [
             {
               "key": "userId",
-              "value": "1",
+              "value": "63",
               "description": "(Required) id текущего пользователя"
             }
           ]
