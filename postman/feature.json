@@ -190,7 +190,7 @@
               "    var jsonData = pm.response.json();\r",
               "    pm.expect(jsonData.id, '\"id\" field').is.not.null;\r",
               "    pm.expect(jsonData.annotation, '\"annotation\" field').to.eql('Сплав на байдарках похож на полёт');\r",
-              "    pm.expect(jsonData.category.id, '\"category.id\" field').to.eql(1);\r",
+              "    pm.expect(jsonData.category.id, '\"category.id\" field').to.eql(55);\r",
               "    pm.expect(jsonData.category.name, '\"category.name\" field').to.eql('Экстрим');\r",
               "    pm.expect(jsonData.confirmedRequests, '\"confirmedRequests\" field').to.eql(0);\r",
               "    pm.expect(jsonData.description, '\"description\" field').to.eql('Сплав на байдарках похож на полёт. На спокойной воде — это парение. На бурной, порожистой — выполнение фигур высшего пилотажа. И то, и другое дарят чувство обновления, феерические эмоции, яркие впечатления.');\r",
